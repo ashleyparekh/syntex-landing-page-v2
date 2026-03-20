@@ -10,12 +10,10 @@ export default function Finovate() {
 
   return (
     <section ref={ref} className="relative py-10 md:py-14">
-      <div className="absolute inset-0 bg-gradient-to-b from-midnight via-deep-blue/20 to-midnight" />
+      <div className="absolute inset-0 bg-white" />
 
       <div className="relative max-w-7xl mx-auto px-6">
         <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-start">
-
-          {/* Left: text */}
           <motion.div
             initial={{ opacity: 0, x: -24 }}
             animate={inView ? { opacity: 1, x: 0 } : {}}
@@ -27,27 +25,25 @@ export default function Finovate() {
                 2× Finovate Scholarship Winner
               </span>
             </div>
-            <h2 className="text-4xl sm:text-5xl lg:text-6xl font-bold leading-tight tracking-tight mb-6">
+            <h2 className="text-4xl sm:text-5xl lg:text-6xl font-bold leading-tight tracking-tight mb-6 text-midnight">
               Our Demo at
               <br />
               <span className="text-gradient-blue">Finovate</span>
             </h2>
           </motion.div>
 
-          {/* Right: London photo + San Diego pill below */}
           <motion.div
             initial={{ opacity: 0, x: 24 }}
             animate={inView ? { opacity: 1, x: 0 } : {}}
             transition={{ duration: 0.7, delay: 0.15 }}
             className="flex flex-col gap-4"
           >
-            {/* London photo */}
             <div>
               <div className="flex items-center gap-2 mb-3">
                 <span className="text-base">🇬🇧</span>
                 <span className="text-sm font-medium text-silver-dark font-sans">Finovate Europe — London</span>
               </div>
-              <div className="glass rounded-2xl overflow-hidden border border-white/[0.06] hover:border-accent-blue/25 transition-all duration-500 group">
+              <div className="glass rounded-2xl overflow-hidden border border-black/[0.07] hover:border-accent-blue/25 transition-all duration-500 group">
                 <div className="relative h-64 w-full">
                   <Image
                     src="/finovate-london.png"
@@ -59,7 +55,6 @@ export default function Finovate() {
               </div>
             </div>
 
-            {/* San Diego strip below */}
             <div className="flex items-center gap-4 px-5 py-4 glass rounded-xl border border-accent-blue/20 hover:border-accent-blue/40 transition-all duration-500">
               <div className="flex items-center gap-2 shrink-0">
                 <span className="text-base">🇺🇸</span>
@@ -70,12 +65,11 @@ export default function Finovate() {
                 </div>
               </div>
               <div>
-                <p className="text-white text-sm font-semibold font-sans">Demoing on May 6th @ Finovate Spring in San Diego</p>
+                <p className="text-midnight text-sm font-semibold font-sans">Demoing on May 6th @ Finovate Spring in San Diego</p>
                 <p className="text-silver-dark text-xs mt-0.5 font-sans">Finovate Spring — San Diego</p>
               </div>
             </div>
           </motion.div>
-
         </div>
       </div>
     </section>

@@ -84,7 +84,7 @@ export default function BlogPost() {
       <div className="max-w-2xl mx-auto px-6 pt-10 pb-2">
         <Link
           href="/blog"
-          className="inline-flex items-center gap-2 text-xs text-silver-dark hover:text-white transition-colors font-sans group"
+          className="inline-flex items-center gap-2 text-xs text-silver-dark hover:text-midnight transition-colors font-sans group"
         >
           <svg className="w-3.5 h-3.5 group-hover:-translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16l-4-4m0 0l4-4m-4 4h18" />
@@ -95,7 +95,7 @@ export default function BlogPost() {
 
       {/* Header */}
       <header className="relative pt-8 pb-10">
-        <div className="absolute inset-0 bg-gradient-to-b from-deep-blue/40 to-midnight" />
+        <div className="absolute inset-0 bg-white" />
         <div className="relative max-w-2xl mx-auto px-6">
           <div className="flex items-center gap-3 mb-5">
             <span className="text-xs text-accent-blue font-sans tracking-wider uppercase">Banking</span>
@@ -129,11 +129,11 @@ export default function BlogPost() {
                 <div className="text-2xl font-bold font-display text-gradient-blue">
                   {s.value}<span className="text-lg">{s.unit}</span>
                 </div>
-                <div className="text-[10px] text-white/35 font-sans mt-0.5 uppercase tracking-widest">{s.label}</div>
+                <div className="text-[10px] text-midnight/40 font-sans mt-0.5 uppercase tracking-widest">{s.label}</div>
               </div>
             ))}
           </div>
-          <p className="text-xs text-white/30 font-sans text-center mt-4 italic">
+          <p className="text-xs text-midnight/30 font-sans text-center mt-4 italic">
             Then two days of conversations. Here's what actually stood out.
           </p>
         </div>
@@ -152,7 +152,7 @@ export default function BlogPost() {
               {/* Callout list for first section */}
               {section.callout && (
                 <div className="mt-5 glass rounded-xl p-5 border border-red-400/15 space-y-3">
-                  <p className="text-[10px] text-white/30 uppercase tracking-widest font-sans mb-1">We heard timelines like</p>
+                  <p className="text-[10px] text-midnight/30 uppercase tracking-widest font-sans mb-1">We heard timelines like</p>
                   {section.callout.items.map((item, j) => (
                     <div key={j} className="flex items-start gap-3">
                       <span className="text-red-400 mt-1 shrink-0">
@@ -170,7 +170,7 @@ export default function BlogPost() {
         </div>
 
         {/* Final thought */}
-        <div className="mt-12 pt-8 border-t border-white/[0.06]">
+        <div className="mt-12 pt-8 border-t border-black/[0.07]">
           <p className="text-[10px] font-medium tracking-[0.2em] uppercase text-accent-blue font-sans mb-3">Final Thought</p>
           <blockquote className="text-lg font-bold leading-snug tracking-tight mb-4">
             Finovate wasn't just a demo.
@@ -209,7 +209,7 @@ export default function BlogPost() {
         <div className="mt-8 text-center">
           <Link
             href="/blog"
-            className="inline-flex items-center gap-2 text-xs text-silver-dark hover:text-white transition-colors font-sans group"
+            className="inline-flex items-center gap-2 text-xs text-silver-dark hover:text-midnight transition-colors font-sans group"
           >
             <svg className="w-3.5 h-3.5 group-hover:-translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16l-4-4m0 0l4-4m-4 4h18" />

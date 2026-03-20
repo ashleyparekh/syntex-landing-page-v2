@@ -22,13 +22,13 @@ function ClientPortalMockup() {
     <div className="glass rounded-2xl p-4 md:p-5 space-y-3">
       <div className="flex items-center gap-2 mb-4">
         <div className="flex gap-1">
-          <div className="w-2.5 h-2.5 rounded-full bg-white/10" />
-          <div className="w-2.5 h-2.5 rounded-full bg-white/10" />
-          <div className="w-2.5 h-2.5 rounded-full bg-white/10" />
+          <div className="w-2.5 h-2.5 rounded-full bg-black/10" />
+          <div className="w-2.5 h-2.5 rounded-full bg-black/10" />
+          <div className="w-2.5 h-2.5 rounded-full bg-black/10" />
         </div>
-        <div className="text-xs text-white/50 ml-1 font-sans">Client Portal</div>
+        <div className="text-xs text-midnight/40 ml-1 font-sans">Client Portal</div>
       </div>
-      <div className="h-1.5 w-full bg-white/[0.06] rounded-full overflow-hidden">
+      <div className="h-1.5 w-full bg-black/[0.06] rounded-full overflow-hidden">
         <motion.div
           className="h-full bg-gradient-to-r from-accent-blue to-blue-400 rounded-full"
           initial={{ width: "0%" }}
@@ -37,14 +37,14 @@ function ClientPortalMockup() {
         />
       </div>
       <div className="text-xs text-silver-dark mb-2 font-sans">3 of 5 steps complete</div>
-      {["Articles of Incorporation", "EIN Letter", "Operating Agreement"].map((doc, i) => (
-        <div key={doc} className="flex items-center gap-3 p-2.5 rounded-lg bg-white/[0.03] border border-white/[0.05]">
-          <div className="w-5 h-5 rounded-full bg-emerald-500/20 text-emerald-300 flex items-center justify-center shrink-0">
+      {["Articles of Incorporation", "EIN Letter", "Operating Agreement"].map((doc) => (
+        <div key={doc} className="flex items-center gap-3 p-2.5 rounded-lg bg-black/[0.03] border border-black/[0.05]">
+          <div className="w-5 h-5 rounded-full bg-emerald-500/20 text-emerald-600 flex items-center justify-center shrink-0">
             <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
             </svg>
           </div>
-          <span className="text-xs text-white/75 font-sans">{doc}</span>
+          <span className="text-xs text-midnight/75 font-sans">{doc}</span>
         </div>
       ))}
       <div className="flex items-center gap-3 p-2.5 rounded-lg bg-accent-blue/[0.06] border border-accent-blue/20">
@@ -63,20 +63,20 @@ function BankerDashboardMockup() {
   return (
     <div className="glass rounded-2xl p-4 md:p-5 space-y-3">
       <div className="flex items-center justify-between mb-2">
-        <div className="text-xs text-white/50 font-sans">Banker Dashboard</div>
-        <div className="text-xs bg-emerald-500/15 text-emerald-300 px-2 py-0.5 rounded-full font-sans">Live</div>
+        <div className="text-xs text-midnight/40 font-sans">Banker Dashboard</div>
+        <div className="text-xs bg-emerald-500/15 text-emerald-600 px-2 py-0.5 rounded-full font-sans">Live</div>
       </div>
       {[
         { name: "Acme Corp", progress: 80, stage: "Doc Review" },
         { name: "BlueSky LLC", progress: 50, stage: "Pending Docs" },
         { name: "Nexus Group", progress: 30, stage: "Started" },
       ].map((item) => (
-        <div key={item.name} className="p-3 rounded-xl bg-white/[0.03] border border-white/[0.05]">
+        <div key={item.name} className="p-3 rounded-xl bg-black/[0.03] border border-black/[0.05]">
           <div className="flex items-center justify-between mb-2">
-            <span className="text-xs font-medium text-white font-sans">{item.name}</span>
+            <span className="text-xs font-medium text-midnight font-sans">{item.name}</span>
             <span className="text-xs text-accent-blue font-sans">{item.stage}</span>
           </div>
-          <div className="h-1 w-full bg-white/[0.06] rounded-full overflow-hidden">
+          <div className="h-1 w-full bg-black/[0.06] rounded-full overflow-hidden">
             <motion.div
               className="h-full bg-gradient-to-r from-accent-blue to-blue-400 rounded-full"
               initial={{ width: "0%" }}
@@ -84,7 +84,7 @@ function BankerDashboardMockup() {
               transition={{ delay: 0.5, duration: 1, ease: "easeOut" }}
             />
           </div>
-          <div className="text-xs text-silver-dark/70 mt-1 font-sans">{item.progress}% complete</div>
+          <div className="text-xs text-silver-dark mt-1 font-sans">{item.progress}% complete</div>
         </div>
       ))}
     </div>
@@ -98,7 +98,7 @@ export default function Solution() {
 
   return (
     <section id="solution" ref={ref} className="relative py-10 md:py-14">
-      <div className="absolute inset-0 bg-gradient-to-b from-midnight via-deep-blue/40 to-midnight" />
+      <div className="absolute inset-0 bg-white" />
       <div className="relative max-w-7xl mx-auto px-6">
         <motion.div initial={{ opacity: 0, y: 30 }} animate={inView ? { opacity: 1, y: 0 } : {}} transition={{ duration: 0.7 }} className="text-center mb-8">
           <div className="flex items-center justify-center gap-2 mb-5">
@@ -110,24 +110,23 @@ export default function Solution() {
 
         <div className="grid lg:grid-cols-2 gap-10 items-start">
           <motion.div initial={{ opacity: 0, x: -24 }} animate={inView ? { opacity: 1, x: 0 } : {}} transition={{ duration: 0.7, delay: 0.2 }}>
-            <div className="inline-flex rounded-xl p-1 bg-white/[0.04] border border-white/[0.08] mb-6">
+            <div className="inline-flex rounded-xl p-1 bg-black/[0.04] border border-black/[0.07] mb-6">
               {(["client", "banker"] as const).map((tab) => (
                 <button
                   key={tab}
                   onClick={() => setActiveTab(tab)}
                   className={`px-5 py-2 rounded-lg text-sm font-medium transition-all duration-300 font-sans ${
-                    activeTab === tab ? "bg-white text-midnight" : "text-silver-dark hover:text-white"
+                    activeTab === tab ? "bg-midnight text-white" : "text-silver-dark hover:text-midnight"
                   }`}
                 >
                   {tab === "client" ? "Client Portal" : "Banker Dashboard"}
                 </button>
               ))}
             </div>
-
             <ul className="space-y-3">
               {(activeTab === "client" ? clientFeatures : bankerFeatures).map((feat) => (
                 <motion.li key={feat} initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} className="flex items-center gap-3">
-                  <div className="w-5 h-5 rounded-full bg-emerald-500/15 text-emerald-300 flex items-center justify-center shrink-0">
+                  <div className="w-5 h-5 rounded-full bg-emerald-500/15 text-emerald-600 flex items-center justify-center shrink-0">
                     <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
                     </svg>

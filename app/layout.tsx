@@ -36,7 +36,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           rel="stylesheet"
         />
       </head>
-      <body className="bg-midnight text-white">
+      <body className="bg-white text-midnight">
         <Navbar />
         {children}
         <Footer />

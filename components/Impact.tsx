@@ -23,8 +23,8 @@ export default function Impact() {
           transition={{ duration: 0.7 }}
           className="flex flex-wrap justify-center gap-3"
         >
-          {metrics.map((m, i) => (
-            <div key={m.value} className="flex items-center gap-3 px-6 py-3 glass rounded-full border border-white/[0.06]">
+          {metrics.map((m) => (
+            <div key={m.value} className="flex items-center gap-3 px-6 py-3 glass rounded-full border border-black/[0.07]">
               <span className="text-2xl font-bold text-gradient-blue font-display">{m.value}</span>
               <span className="text-xs text-silver-dark font-sans">{m.label}</span>
             </div>

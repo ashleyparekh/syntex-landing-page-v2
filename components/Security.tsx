@@ -24,7 +24,7 @@ const badges = [
   },
   {
     title: "Encryption",
-    description: "End-to-end data encryption",
+    description: "Encryption at rest & in transit",
     icon: (
       <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
@@ -38,7 +38,7 @@ export default function Security() {
   const inView = useInView(ref, { once: true, margin: "-100px" });
 
   return (
-    <section id="security" ref={ref} className="relative py-10 md:py-14 bg-gradient-to-b from-midnight via-deep-blue/30 to-midnight">
+    <section id="security" ref={ref} className="relative py-10 md:py-14 bg-white">
       <div className="relative max-w-7xl mx-auto px-6">
         <motion.div initial={{ opacity: 0, y: 30 }} animate={inView ? { opacity: 1, y: 0 } : {}} transition={{ duration: 0.7 }} className="text-center mb-8">
           <div className="flex items-center justify-center gap-2 mb-5">
@@ -46,7 +46,7 @@ export default function Security() {
             <span className="text-xs font-medium tracking-[0.2em] uppercase text-accent-blue font-sans">Security & Compliance</span>
             <div className="h-px w-12 bg-gradient-to-l from-transparent to-accent-blue/60" />
           </div>
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight">
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-midnight">
             Enterprise-Grade
             <br />
             <span className="text-gradient-blue">Security</span>
@@ -63,10 +63,10 @@ export default function Security() {
               whileHover={{ y: -4, scale: 1.02 }}
               className="glass rounded-2xl p-6 text-center hover:border-accent-blue/25 transition-all duration-500 group w-44"
             >
-              <div className="w-12 h-12 rounded-xl bg-accent-blue/[0.08] border border-accent-blue/20 flex items-center justify-center text-accent-blue group-hover:text-white group-hover:bg-accent-blue/20 mx-auto mb-4 transition-all duration-300">
+              <div className="w-12 h-12 rounded-xl bg-accent-blue/[0.08] border border-accent-blue/20 flex items-center justify-center text-accent-blue group-hover:bg-accent-blue/15 mx-auto mb-4 transition-all duration-300">
                 {badge.icon}
               </div>
-              <h3 className="text-sm font-semibold mb-1">{badge.title}</h3>
+              <h3 className="text-sm font-semibold mb-1 text-midnight">{badge.title}</h3>
               <p className="text-xs text-silver-dark leading-relaxed font-sans">{badge.description}</p>
             </motion.div>
           ))}

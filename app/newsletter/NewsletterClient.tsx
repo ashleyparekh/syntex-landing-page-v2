@@ -58,14 +58,14 @@ function StoryCard({ story, index }: { story: typeof stories[0]; index: number }
       initial={{ opacity: 0, y: 28 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.6, delay: 0.3 + index * 0.1, ease: "easeOut" }}
-      className="group relative glass rounded-2xl p-7 border border-white/[0.06] hover:border-white/15 transition-all duration-500"
+      className="group relative glass rounded-2xl p-7 border border-black/[0.07] hover:border-black/10 transition-all duration-500"
     >
       {/* Category + tag */}
       <div className="flex items-center gap-2 mb-4">
-        <span className="text-[10px] font-medium tracking-[0.18em] uppercase text-white/40 font-sans">
+        <span className="text-[10px] font-medium tracking-[0.18em] uppercase text-midnight/40 font-sans">
           {story.category}
         </span>
-        <span className="text-white/20 text-[10px]">·</span>
+        <span className="text-midnight/20 text-[10px]">·</span>
         <span className={`text-[10px] font-medium px-2 py-0.5 rounded-full border font-sans ${story.tagColor}`}>
           {story.tag}
         </span>
@@ -83,13 +83,13 @@ function StoryCard({ story, index }: { story: typeof stories[0]; index: number }
 
       {/* Why it matters */}
       <div className="space-y-3">
-        <div className="border-l-2 border-white/10 pl-3">
-          <p className="text-[10px] text-white/35 uppercase tracking-widest font-sans mb-1">Why this matters</p>
+        <div className="border-l-2 border-black/08 pl-3">
+          <p className="text-[10px] text-midnight/40 uppercase tracking-widest font-sans mb-1">Why this matters</p>
           <p className="text-sm text-silver-dark font-sans leading-relaxed">{story.mattersWhy}</p>
         </div>
         <div className="border-l-2 border-accent-blue/40 pl-3">
           <p className="text-[10px] text-accent-blue/60 uppercase tracking-widest font-sans mb-1">What this means</p>
-          <p className="text-sm text-white/80 font-sans leading-relaxed font-medium">{story.signal}</p>
+          <p className="text-sm text-midnight font-sans leading-relaxed font-medium">{story.signal}</p>
         </div>
       </div>
     </motion.article>
@@ -144,12 +144,12 @@ function SubscribeForm() {
             onChange={(e) => setEmail(e.target.value)}
             placeholder="your@bank.com"
             required
-            className="flex-1 px-4 py-3 rounded-xl bg-white/[0.05] border border-white/10 text-white placeholder-white/25 text-sm font-sans focus:outline-none focus:border-accent-blue/50 focus:bg-white/[0.07] transition-all duration-300"
+            className="flex-1 px-4 py-3 rounded-xl bg-black/[0.04] border border-black/[0.08] text-midnight placeholder-midnight/30 text-sm font-sans focus:outline-none focus:border-accent-blue/50 transition-all duration-300"
           />
           <button
             type="submit"
             disabled={status === "loading"}
-            className="px-6 py-3 bg-white text-midnight font-semibold text-sm rounded-xl hover:shadow-[0_0_30px_rgba(74,145,255,0.25)] transition-all duration-300 shrink-0 disabled:opacity-60 disabled:cursor-not-allowed font-sans"
+            className="px-6 py-3 bg-midnight text-white font-semibold text-sm rounded-xl hover:shadow-[0_0_30px_rgba(29,86,216,0.2)] transition-all duration-300 shrink-0 disabled:opacity-60 disabled:cursor-not-allowed font-sans"
           >
             {status === "loading" ? (
               <span className="flex items-center gap-2">
@@ -165,7 +165,7 @@ function SubscribeForm() {
           </button>
         </form>
       )}
-      <p className="text-[11px] text-white/20 font-sans mt-3">No spam. Unsubscribe anytime.</p>
+      <p className="text-[11px] text-midnight/20 font-sans mt-3">No spam. Unsubscribe anytime.</p>
     </div>
   );
 }
@@ -175,7 +175,7 @@ export default function NewsletterClient() {
     <main className="pt-20">
       {/* Hero */}
       <div className="relative pt-16 pb-10">
-        <div className="absolute inset-0 bg-gradient-to-b from-deep-blue/50 to-midnight" />
+        <div className="absolute inset-0 bg-white" />
         <div className="relative max-w-3xl mx-auto px-6">
           <motion.div {...fadeUp(0)} className="flex items-center gap-2 mb-5">
             <div className="h-px w-8 bg-gradient-to-r from-accent-blue/70 to-transparent" />
@@ -206,7 +206,7 @@ export default function NewsletterClient() {
           {/* Divider with label */}
           <motion.div {...fadeUp(0.3)} className="flex items-center gap-4 py-2">
             <div className="h-px flex-1 bg-white/[0.06]" />
-            <span className="text-[10px] text-white/25 uppercase tracking-widest font-sans shrink-0">
+            <span className="text-[10px] text-midnight/25 uppercase tracking-widest font-sans shrink-0">
               Sample stories
             </span>
             <div className="h-px flex-1 bg-white/[0.06]" />
@@ -233,7 +233,7 @@ export default function NewsletterClient() {
                 e.preventDefault();
                 window.scrollTo({ top: 0, behavior: "smooth" });
               }}
-              className="inline-flex items-center gap-2 text-sm text-accent-blue hover:text-white transition-colors font-sans"
+              className="inline-flex items-center gap-2 text-sm text-accent-blue hover:text-midnight transition-colors font-sans"
             >
               <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 10l7-7m0 0l7 7m-7-7v18" />

@@ -68,14 +68,14 @@ export default function Problem() {
 
   return (
     <section id="problem" ref={ref} className="relative py-10 md:py-14 overflow-hidden">
-      <div className="absolute inset-0 bg-gradient-to-b from-midnight via-deep-blue/40 to-midnight" />
+      <div className="absolute inset-0 bg-white" />
 
       <div className="relative max-w-7xl mx-auto px-6">
         <motion.div variants={fadeUp} initial="hidden" animate={inView ? "visible" : "hidden"} className="text-center mb-10">
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight">
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-midnight">
             Losing deposits to faster banks?
             <br />
-            <span className="text-gradient-blue">60% of applicants never finish onboarding.</span>
+            <span className="text-gradient-blue">60% of applicants never finish opening their account.</span>
           </h2>
         </motion.div>
 
@@ -86,28 +86,28 @@ export default function Problem() {
           transition={{ delay: 0.2 }}
           className="grid md:grid-cols-2 gap-6 max-w-5xl mx-auto"
         >
-          <div className="glass rounded-2xl p-7 border border-red-500/10 hover:border-red-500/25 transition-all duration-500">
-            <div className="text-xs font-medium tracking-[0.15em] uppercase text-red-400 mb-4 font-sans">
+          <div className="glass rounded-2xl p-7 border border-red-200 hover:border-red-300 transition-all duration-500">
+            <div className="text-xs font-medium tracking-[0.15em] uppercase text-red-500 mb-4 font-sans">
               Traditional Banks
             </div>
-            <div className="text-4xl md:text-5xl font-bold font-display text-white mb-1">1–3 weeks</div>
+            <div className="text-4xl md:text-5xl font-bold font-display text-midnight mb-1">1–3 weeks</div>
             <div className="text-sm text-silver-dark mb-6 font-sans">to fund an account</div>
             <ul className="space-y-4">
               {bankPains.map((item, i) => (
                 <li key={i} className="flex items-start gap-3">
-                  <span className="text-red-400 mt-0.5">{item.icon}</span>
+                  <span className="text-red-500 mt-0.5">{item.icon}</span>
                   <span className="text-sm text-silver-dark leading-relaxed font-sans">{item.text}</span>
                 </li>
               ))}
             </ul>
           </div>
 
-          <div className="glass rounded-2xl p-7 border border-accent-blue/15 hover:border-accent-blue/35 transition-all duration-500">
+          <div className="glass rounded-2xl p-7 border border-accent-blue/20 hover:border-accent-blue/40 transition-all duration-500">
             <div className="text-xs font-medium tracking-[0.15em] uppercase text-accent-blue mb-4 font-sans">
               With Syntex
             </div>
-            <div className="text-4xl md:text-5xl font-bold font-display text-gradient-blue mb-1">&lt;24 hours</div>
-            <div className="text-sm text-silver-dark mb-6 font-sans">to fund an account</div>
+            <div className="text-4xl md:text-5xl font-bold font-display text-gradient-blue mb-1">&lt;10 mins</div>
+            <div className="text-sm text-silver-dark mb-6 font-sans">to get started</div>
             <ul className="space-y-4">
               {syntexAdvantages.map((item, i) => (
                 <li key={i} className="flex items-start gap-3">

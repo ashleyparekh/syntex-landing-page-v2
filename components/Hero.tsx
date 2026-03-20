@@ -48,11 +48,11 @@ function AnimatedWorkflow() {
       <div className="relative glass rounded-2xl p-6 md:p-8">
         <div className="flex items-center gap-3 mb-6">
           <div className="flex gap-1.5">
-            <div className="w-3 h-3 rounded-full bg-white/10" />
-            <div className="w-3 h-3 rounded-full bg-white/10" />
-            <div className="w-3 h-3 rounded-full bg-white/10" />
+            <div className="w-3 h-3 rounded-full bg-black/10" />
+            <div className="w-3 h-3 rounded-full bg-black/10" />
+            <div className="w-3 h-3 rounded-full bg-black/10" />
           </div>
-          <div className="text-xs text-white/70 ml-2 tracking-wider uppercase font-sans">Syntex Platform</div>
+          <div className="text-xs text-midnight/50 ml-2 tracking-wider uppercase font-sans">Syntex Platform</div>
         </div>
 
         <div className="flex justify-between mb-8">
@@ -61,12 +61,12 @@ function AnimatedWorkflow() {
               <motion.div
                 animate={{ scale: step === i ? 1.1 : 0.9, opacity: step >= i ? 1 : 0.3 }}
                 className={`w-10 h-10 rounded-xl flex items-center justify-center transition-colors duration-500 ${
-                  step === i ? "bg-white text-midnight" : step > i ? "bg-white/20 text-white" : "bg-white/5 text-white/30"
+                  step === i ? "bg-midnight text-white" : step > i ? "bg-midnight/15 text-midnight" : "bg-black/5 text-midnight/30"
                 }`}
               >
                 {s.icon}
               </motion.div>
-              <span className={`text-[10px] md:text-xs tracking-wide transition-colors duration-500 font-sans ${step === i ? "text-white" : "text-white/30"}`}>
+              <span className={`text-[10px] md:text-xs tracking-wide transition-colors duration-500 font-sans ${step === i ? "text-midnight" : "text-midnight/30"}`}>
                 {s.label}
               </span>
             </div>
@@ -86,19 +86,19 @@ function AnimatedWorkflow() {
               initial={{ opacity: 0, x: -10 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: i * 0.15 }}
-              className="flex items-center gap-3 p-3 rounded-lg bg-white/[0.03] border border-white/[0.06]"
+              className="flex items-center gap-3 p-3 rounded-lg bg-black/[0.03] border border-black/[0.06]"
             >
               <motion.div
                 initial={{ scale: 0 }}
                 animate={{ scale: 1 }}
                 transition={{ delay: i * 0.15 + 0.2, type: "spring" }}
-                className="w-5 h-5 rounded-full flex items-center justify-center bg-emerald-500/25 text-emerald-300"
+                className="w-5 h-5 rounded-full flex items-center justify-center bg-emerald-500/20 text-emerald-600"
               >
                 <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                 </svg>
               </motion.div>
-              <span className="text-sm text-white/80 font-sans">{item}</span>
+              <span className="text-sm text-midnight/80 font-sans">{item}</span>
             </motion.div>
           ))}
         </motion.div>
@@ -107,7 +107,7 @@ function AnimatedWorkflow() {
           {[0, 1, 2].map((i) => (
             <div
               key={i}
-              className={`h-1 rounded-full transition-all duration-500 ${step === i ? "w-8 bg-accent-blue" : "w-2 bg-white/20"}`}
+              className={`h-1 rounded-full transition-all duration-500 ${step === i ? "w-8 bg-accent-blue" : "w-2 bg-black/15"}`}
             />
           ))}
         </div>
@@ -129,8 +129,8 @@ export default function Hero() {
   return (
     <section className="relative min-h-screen flex items-center pt-20 overflow-hidden">
       <div className="absolute inset-0">
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[900px] h-[900px] bg-gradient-radial from-deep-blue/60 via-deep-blue/20 to-transparent opacity-80" />
-        <div className="absolute bottom-0 right-0 w-[600px] h-[600px] bg-gradient-radial from-deep-blue/30 via-transparent to-transparent opacity-50" />
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[900px] h-[900px] bg-gradient-radial from-accent-blue/[0.07] via-accent-blue/[0.03] to-transparent" />
+        <div className="absolute bottom-0 right-0 w-[600px] h-[600px] bg-gradient-radial from-accent-blue/[0.05] via-transparent to-transparent" />
       </div>
 
       <div className="relative max-w-7xl mx-auto px-6 py-10 md:py-20 w-full">
@@ -144,15 +144,15 @@ export default function Hero() {
             </motion.div>
 
             <motion.h1 custom={1} variants={fadeUp} initial="hidden" animate="visible"
-              className="text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold leading-[1.05] tracking-tight mb-6">
+              className="text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold leading-[1.05] tracking-tight mb-6 text-midnight">
               Fund Businesses
               <br />
-              in Days,{" "}
+              in Minutes,{" "}
               <span className="text-gradient-blue">Not Weeks.</span>
             </motion.h1>
 
             <motion.p custom={2} variants={fadeUp} initial="hidden" animate="visible"
-              className="text-base text-white leading-relaxed max-w-xl mb-8 font-sans">
+              className="text-base text-silver-dark leading-relaxed max-w-xl mb-8 font-sans">
               Syntex is an AI-powered onboarding platform that helps banks and
               credit unions collect, verify, and process client documents faster.
             </motion.p>
@@ -162,7 +162,7 @@ export default function Hero() {
                 href="https://calendly.com/ashleyparekh"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="group relative px-8 py-4 bg-white text-midnight font-semibold rounded-xl text-sm hover:shadow-[0_0_40px_rgba(74,145,255,0.3)] transition-all duration-300"
+                className="group relative px-8 py-4 bg-midnight text-white font-semibold rounded-xl text-sm hover:shadow-[0_8px_30px_rgba(74,145,255,0.25)] transition-all duration-300"
               >
                 Book a Demo
                 <span className="inline-block ml-2 group-hover:translate-x-1 transition-transform">&rarr;</span>
@@ -184,24 +184,21 @@ export default function Hero() {
               ))}
             </motion.div>
 
-            {/* Institution type badges */}
             <motion.div custom={5} variants={fadeUp} initial="hidden" animate="visible" className="flex items-center gap-3">
-              <span className="text-[10px] text-white/50 tracking-[0.15em] uppercase font-sans shrink-0">Built for</span>
-              <div className="h-px flex-1 bg-white/15" />
+              <span className="text-[10px] text-midnight/40 tracking-[0.15em] uppercase font-sans shrink-0">Built for</span>
+              <div className="h-px flex-1 bg-black/10" />
               <div className="flex items-center gap-2">
-                {/* Community Bank */}
-                <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg border border-white/20 bg-white/[0.07] group hover:border-accent-blue/50 hover:bg-accent-blue/10 transition-all duration-300">
-                  <svg className="w-4 h-4 text-white/80 group-hover:text-accent-blue transition-colors shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg border border-black/10 bg-black/[0.03] group hover:border-accent-blue/40 hover:bg-accent-blue/[0.05] transition-all duration-300">
+                  <svg className="w-4 h-4 text-midnight/50 group-hover:text-accent-blue transition-colors shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M8 14v3m4-3v3m4-3v3M3 21h18M3 10h18M3 7l9-4 9 4M4 10h16v11H4V10z" />
                   </svg>
-                  <span className="text-[11px] text-white/80 group-hover:text-white transition-colors font-sans">Community Banks</span>
+                  <span className="text-[11px] text-midnight/50 group-hover:text-midnight transition-colors font-sans">Community Banks</span>
                 </div>
-                {/* Credit Union */}
-                <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg border border-white/20 bg-white/[0.07] group hover:border-accent-blue/50 hover:bg-accent-blue/10 transition-all duration-300">
-                  <svg className="w-4 h-4 text-white/80 group-hover:text-accent-blue transition-colors shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg border border-black/10 bg-black/[0.03] group hover:border-accent-blue/40 hover:bg-accent-blue/[0.05] transition-all duration-300">
+                  <svg className="w-4 h-4 text-midnight/50 group-hover:text-accent-blue transition-colors shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z" />
                   </svg>
-                  <span className="text-[11px] text-white/80 group-hover:text-white transition-colors font-sans">Credit Unions</span>
+                  <span className="text-[11px] text-midnight/50 group-hover:text-midnight transition-colors font-sans">Credit Unions</span>
                 </div>
               </div>
             </motion.div>

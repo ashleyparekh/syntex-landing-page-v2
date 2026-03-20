@@ -12,7 +12,7 @@ export default function ProductPage() {
   return (
     <main className="pt-20">
       <div className="relative pt-16 pb-4">
-        <div className="absolute inset-0 bg-gradient-to-b from-deep-blue/40 to-midnight" />
+        <div className="absolute inset-0 bg-white" />
         <div className="relative max-w-7xl mx-auto px-6 text-center">
           <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight">
             The Syntex{" "}

@@ -13,7 +13,7 @@ const fadeUp = (delay = 0) => ({
 /* ─── Analytics Funnel UI ─────────────────────────────────────── */
 function FunnelUI() {
   const stages = [
-    { label: "First Outreach", value: "100%", color: "bg-white/20", width: "w-full" },
+    { label: "First Outreach", value: "100%", color: "bg-midnight/20", width: "w-full" },
     { label: "Application Started", value: "68%", color: "bg-accent-blue/40", width: "w-[68%]" },
     { label: "Docs Submitted", value: "41%", color: "bg-accent-blue/55", width: "w-[41%]" },
     { label: "In Review", value: "28%", color: "bg-accent-blue/70", width: "w-[28%]" },
@@ -27,9 +27,9 @@ function FunnelUI() {
   ];
 
   return (
-    <div className="glass rounded-2xl p-6 border border-white/[0.06] space-y-4">
+    <div className="glass rounded-2xl p-6 border border-black/[0.07] space-y-4">
       <div className="flex items-center justify-between mb-2">
-        <span className="text-[10px] text-white/40 uppercase tracking-widest font-sans">Onboarding Funnel</span>
+        <span className="text-[10px] text-midnight/40 uppercase tracking-widest font-sans">Onboarding Funnel</span>
         <span className="text-[10px] text-emerald-400/70 font-sans">Live</span>
       </div>
 
@@ -44,8 +44,8 @@ function FunnelUI() {
             viewport={{ once: true }}
             transition={{ delay: i * 0.1, duration: 0.5 }}
           >
-            <span className="text-[10px] text-white/35 font-sans w-28 shrink-0 text-right leading-tight">{s.label}</span>
-            <div className="flex-1 h-5 bg-white/[0.04] rounded overflow-hidden">
+            <span className="text-[10px] text-midnight/35 font-sans w-28 shrink-0 text-right leading-tight">{s.label}</span>
+            <div className="flex-1 h-5 bg-black/[0.04] rounded overflow-hidden">
               <motion.div
                 className={`h-full rounded ${s.color}`}
                 initial={{ width: 0 }}
@@ -63,17 +63,17 @@ function FunnelUI() {
                 />
               </motion.div>
             </div>
-            <span className="text-[10px] font-mono text-white/40 w-8 shrink-0">{s.value}</span>
+            <span className="text-[10px] font-mono text-midnight/40 w-8 shrink-0">{s.value}</span>
           </motion.div>
         ))}
       </div>
 
       {/* Metric pills */}
-      <div className="grid grid-cols-3 gap-2 pt-3 border-t border-white/[0.05]">
+      <div className="grid grid-cols-3 gap-2 pt-3 border-t border-black/[0.06]">
         {metrics.map((m) => (
-          <div key={m.label} className="bg-white/[0.03] rounded-lg p-2.5 text-center">
+          <div key={m.label} className="bg-black/[0.03] rounded-lg p-2.5 text-center">
             <div className="text-base font-bold text-gradient-blue font-display">{m.value}</div>
-            <div className="text-[10px] text-white/35 font-sans mt-0.5 leading-tight">{m.label}</div>
+            <div className="text-[10px] text-midnight/35 font-sans mt-0.5 leading-tight">{m.label}</div>
           </div>
         ))}
       </div>
@@ -90,7 +90,7 @@ function FunnelUI() {
         </div>
         <div className="flex justify-between mt-1">
           {["Day 1", "Day 4", "Day 9", "Day 14", "Funded"].map((t) => (
-            <span key={t} className="text-[9px] text-white/25 font-sans">{t}</span>
+            <span key={t} className="text-[9px] text-midnight/25 font-sans">{t}</span>
           ))}
         </div>
       </div>
@@ -141,7 +141,7 @@ const edgeItems = [
 export default function ProductDeepDive() {
   return (
     <div className="relative">
-      <div className="absolute inset-0 bg-gradient-to-b from-midnight via-deep-blue/25 to-midnight pointer-events-none" />
+      <div className="absolute inset-0 bg-white pointer-events-none" />
 
       {/* ── SECTION 1: Analytics ─────────────────────────────── */}
       <section className="relative py-12 md:py-16">
@@ -177,7 +177,7 @@ export default function ProductDeepDive() {
                   </li>
                 ))}
               </ul>
-              <p className="text-xs text-white/35 font-sans italic border-l border-accent-blue/30 pl-3">
+              <p className="text-xs text-midnight/35 font-sans italic border-l border-accent-blue/30 pl-3">
                 Most banks don't track this. We do.
               </p>
             </motion.div>
@@ -192,7 +192,7 @@ export default function ProductDeepDive() {
 
       {/* Divider */}
       <div className="max-w-7xl mx-auto px-6">
-        <div className="h-px bg-white/[0.05]" />
+        <div className="h-px bg-black/[0.06]" />
       </div>
 
       {/* ── SECTION 2: Automation comparison ─────────────────── */}
@@ -229,16 +229,16 @@ export default function ProductDeepDive() {
               </ul>
 
               {/* Inbox pile visual */}
-              <div className="mt-6 pt-5 border-t border-white/[0.05] space-y-2">
+              <div className="mt-6 pt-5 border-t border-black/[0.06] space-y-2">
                 {["RE: RE: RE: Documents needed", "FWD: Missing EIN letter", "Reminder: Application incomplete"].map((subj, i) => (
-                  <div key={i} className="flex items-center gap-2.5 p-2 rounded-lg bg-white/[0.03] border border-white/[0.04]">
-                    <svg className="w-3 h-3 text-white/25 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <div key={i} className="flex items-center gap-2.5 p-2 rounded-lg bg-black/[0.03] border border-black/[0.04]">
+                    <svg className="w-3 h-3 text-midnight/25 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                     </svg>
-                    <span className="text-[10px] text-white/25 font-sans truncate">{subj}</span>
+                    <span className="text-[10px] text-midnight/25 font-sans truncate">{subj}</span>
                   </div>
                 ))}
-                <p className="text-[10px] text-white/20 font-sans text-right">+14 more unread</p>
+                <p className="text-[10px] text-midnight/20 font-sans text-right">+14 more unread</p>
               </div>
             </motion.div>
 
@@ -264,8 +264,8 @@ export default function ProductDeepDive() {
               </ul>
 
               {/* Doc scan animation */}
-              <div className="mt-6 pt-5 border-t border-white/[0.05]">
-                <div className="relative rounded-xl bg-white/[0.03] border border-white/[0.06] p-4 overflow-hidden">
+              <div className="mt-6 pt-5 border-t border-black/[0.06]">
+                <div className="relative rounded-xl bg-black/[0.03] border border-black/[0.07] p-4 overflow-hidden">
                   <motion.div
                     animate={{ top: ["8%", "88%", "8%"] }}
                     transition={{ duration: 2.8, repeat: Infinity, ease: "easeInOut" }}
@@ -300,7 +300,7 @@ export default function ProductDeepDive() {
 
       {/* Divider */}
       <div className="max-w-7xl mx-auto px-6">
-        <div className="h-px bg-white/[0.05]" />
+        <div className="h-px bg-black/[0.06]" />
       </div>
 
       {/* ── SECTION 3: Under the Hood ────────────────────────── */}
@@ -320,7 +320,7 @@ export default function ProductDeepDive() {
                 key={item.title}
                 {...fadeUp(i * 0.1)}
                 whileHover={{ y: -5, transition: { duration: 0.25 } }}
-                className="glass rounded-2xl p-5 border border-white/[0.06] hover:border-accent-blue/25 transition-all duration-400 group"
+                className="glass rounded-2xl p-5 border border-black/[0.07] hover:border-accent-blue/25 transition-all duration-400 group"
               >
                 <div className="w-9 h-9 rounded-xl bg-accent-blue/[0.08] border border-accent-blue/20 flex items-center justify-center text-accent-blue mb-4 group-hover:bg-accent-blue/15 transition-all duration-300">
                   {item.icon}
@@ -334,9 +334,9 @@ export default function ProductDeepDive() {
           {/* Final statement */}
           <motion.div
             {...fadeUp(0.3)}
-            className="text-center py-10 border-t border-white/[0.05]"
+            className="text-center py-10 border-t border-black/[0.06]"
           >
-            <p className="text-2xl sm:text-3xl lg:text-4xl font-bold tracking-tight text-white">
+            <p className="text-2xl sm:text-3xl lg:text-4xl font-bold tracking-tight text-midnight">
               Less manual work.{" "}
               <span className="text-gradient-blue">Faster funding.</span>
               {" "}More deposits.

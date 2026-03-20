@@ -91,7 +91,7 @@ export default function BlogPost() {
       <div className="max-w-2xl mx-auto px-6 pt-10 pb-2">
         <Link
           href="/blog"
-          className="inline-flex items-center gap-2 text-xs text-silver-dark hover:text-white transition-colors font-sans group"
+          className="inline-flex items-center gap-2 text-xs text-silver-dark hover:text-midnight transition-colors font-sans group"
         >
           <svg
             className="w-3.5 h-3.5 group-hover:-translate-x-1 transition-transform"
@@ -107,7 +107,7 @@ export default function BlogPost() {
 
       {/* Article header */}
       <header className="relative pt-8 pb-10">
-        <div className="absolute inset-0 bg-gradient-to-b from-deep-blue/40 to-midnight" />
+        <div className="absolute inset-0 bg-white" />
         <div className="relative max-w-2xl mx-auto px-6">
           <div className="flex items-center gap-3 mb-5">
             <span className="text-xs text-accent-blue font-sans tracking-wider uppercase">Onboarding</span>
@@ -156,7 +156,7 @@ export default function BlogPost() {
         </div>
 
         {/* Final thought */}
-        <div className="mt-12 pt-8 border-t border-white/[0.06]">
+        <div className="mt-12 pt-8 border-t border-black/[0.07]">
           <p className="text-[10px] font-medium tracking-[0.2em] uppercase text-accent-blue font-sans mb-3">Final Thought</p>
           <blockquote className="text-lg font-bold leading-snug tracking-tight">
             Onboarding isn't just the first step of the customer journey.{" "}
@@ -192,7 +192,7 @@ export default function BlogPost() {
         <div className="mt-8 text-center">
           <Link
             href="/blog"
-            className="inline-flex items-center gap-2 text-xs text-silver-dark hover:text-white transition-colors font-sans group"
+            className="inline-flex items-center gap-2 text-xs text-silver-dark hover:text-midnight transition-colors font-sans group"
           >
             <svg className="w-3.5 h-3.5 group-hover:-translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16l-4-4m0 0l4-4m-4 4h18" />

@@ -12,8 +12,8 @@ const config: Config = {
         silver: "#C0C0C0",
         "deep-blue": "#0B1F3B",
         "silver-light": "#E8E8E8",
-        "silver-dark": "#D8D8D8",
-        "accent-blue": "#4A91FF",
+        "silver-dark": "#555555",
+        "accent-blue": "#1D56D8",
       },
       fontFamily: {
         sans: ["'DM Sans'", "system-ui", "sans-serif"],
