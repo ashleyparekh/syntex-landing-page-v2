@@ -39,8 +39,8 @@ export default function Navbar() {
             height={36}
             className="opacity-90 group-hover:opacity-100 transition-opacity"
           />
-          <span className="font-display text-2xl font-semibold tracking-tight text-midnight">
-            Syntex
+          <span className="font-sans text-sm font-semibold tracking-[0.2em] uppercase text-midnight">
+            SYNTEX
           </span>
         </Link>
 
