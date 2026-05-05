@@ -16,10 +16,9 @@ export default function Navbar() {
   }, []);
 
   const links = [
-    { label: "Product", href: "/product" },
-    { label: "Newsletter", href: "/newsletter" },
+    { label: "How It Works", href: "/#how-it-works" },
+    { label: "Why Syntex", href: "/#why-syntex" },
     { label: "Blog", href: "/blog" },
-    { label: "Security", href: "/security" },
   ];
 
   return (

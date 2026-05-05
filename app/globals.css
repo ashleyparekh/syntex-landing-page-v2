@@ -24,7 +24,7 @@ body {
   background-image: radial-gradient(circle, rgba(0,0,0,0.035) 1px, transparent 1px);
   background-size: 36px 36px;
   color: #0A0A0A;
-  font-family: 'DM Sans', system-ui, sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   font-size: 15px;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;

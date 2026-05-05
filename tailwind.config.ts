@@ -16,8 +16,8 @@ const config: Config = {
         "accent-blue": "#1D56D8",
       },
       fontFamily: {
-        sans: ["'DM Sans'", "system-ui", "sans-serif"],
-        display: ["'Fraunces'", "Georgia", "serif"],
+        sans: ["'Inter'", "system-ui", "sans-serif"],
+        display: ["'Instrument Serif'", "Georgia", "serif"],
         mono: ["'Courier Prime'", "'Courier New'", "monospace"],
       },
       backgroundImage: {

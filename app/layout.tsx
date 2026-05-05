@@ -4,21 +4,21 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 
 export const metadata: Metadata = {
-  title: "Syntex — Digital Account Opening for Banks & Credit Unions",
+  title: "Syntex — commercial due diligence for Foreign Entities at Private Lenders",
   description:
-    "Syntex is an AI-powered onboarding platform that helps banks and credit unions collect, verify, and process business account documents faster. Reduce onboarding time by 70%.",
+    "Syntex runs AI-powered commercial due diligence on any foreign entity in minutes. Multi-layer ownership chains, foreign formation documents, complete beneficial ownership resolution. Built for private lenders.",
   keywords: [
-    "digital account opening for banks",
-    "business account onboarding software",
-    "bank onboarding automation",
-    "KYC onboarding automation",
-    "commercial banking onboarding software",
-    "credit union onboarding platform",
+    "commercial due diligence foreign entities private lenders",
+    "beneficial ownership resolution",
+    "foreign entity compliance",
+    "private lender commercial due diligence software",
+    "AI compliance for private credit",
+    "foreign entity due diligence",
   ],
   openGraph: {
-    title: "Syntex — Fund Businesses in Days, Not Weeks",
+    title: "Syntex — Stop Turning Down Foreign Entity Deals",
     description:
-      "AI-powered onboarding platform for banks and credit unions. 70% faster onboarding. 40% higher conversion.",
+      "AI agents that read foreign formation documents, trace multi-layer ownership chains, and deliver a complete beneficial ownership resolution. $300 vs $5,000 at a law firm.",
     type: "website",
     siteName: "Syntex",
   },
@@ -32,7 +32,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link
-          href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,300;1,9..144,400&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600&display=swap"
+          href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap"
           rel="stylesheet"
         />
       </head>

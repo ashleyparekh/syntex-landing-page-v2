@@ -3,62 +3,24 @@
 import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
 
-const fadeUp = {
-  hidden: { opacity: 0, y: 30 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.7, ease: "easeOut" } },
-};
-
-const bankPains = [
+const cards = [
   {
-    icon: (
-      <svg className="w-4 h-4 shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-      </svg>
-    ),
-    text: "Manual document collection via email — chasing clients for every missing file",
+    number: "60%",
+    label: "of private lenders decline all foreign entities",
+    style: "border-red-200 bg-red-50/40",
+    numberStyle: "text-red-600",
   },
   {
-    icon: (
-      <svg className="w-4 h-4 shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-      </svg>
-    ),
-    text: "Weeks of back-and-forth coordinating pre-KYC, AML, and credit review across teams",
+    number: "3 weeks",
+    label: "average turnaround at outside counsel",
+    style: "border-red-200 bg-red-50/40",
+    numberStyle: "text-red-600",
   },
   {
-    icon: (
-      <svg className="w-4 h-4 shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
-      </svg>
-    ),
-    text: "Zero visibility into where clients drop off — no way to recover lost applications",
-  },
-];
-
-const syntexAdvantages = [
-  {
-    icon: (
-      <svg className="w-4 h-4 shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-      </svg>
-    ),
-    text: "Real-time doc validation in the client portal — flags issues instantly with option to escalate to RM",
-  },
-  {
-    icon: (
-      <svg className="w-4 h-4 shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
-      </svg>
-    ),
-    text: "Auto-parsed documents with direct nCino integration — no manual re-entry",
-  },
-  {
-    icon: (
-      <svg className="w-4 h-4 shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
-      </svg>
-    ),
-    text: "Live analytics: visitors, applications started, submitted, dropped — and exactly why",
+    number: "4+ layers",
+    label: "average shell company depth in flagged deals",
+    style: "border-red-200 bg-red-50/40",
+    numberStyle: "text-red-600",
   },
 ];
 
@@ -67,57 +29,54 @@ export default function Problem() {
   const inView = useInView(ref, { once: true, margin: "-100px" });
 
   return (
-    <section id="problem" ref={ref} className="relative py-10 md:py-14 overflow-hidden">
-      <div className="absolute inset-0 bg-white" />
+    <section id="problem" ref={ref} className="py-14 md:py-20 bg-white border-t border-black/[0.06]">
+      <div className="max-w-7xl mx-auto px-6">
+        <div className="grid lg:grid-cols-2 gap-16 items-center">
 
-      <div className="relative max-w-7xl mx-auto px-6">
-        <motion.div variants={fadeUp} initial="hidden" animate={inView ? "visible" : "hidden"} className="text-center mb-10">
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-midnight">
-            Losing deposits to faster banks?
-            <br />
-            <span className="text-gradient-blue">60% of applicants never finish opening their account.</span>
-          </h2>
-        </motion.div>
+          {/* Left */}
+          <div>
+            <motion.h2
+              initial={{ opacity: 0, y: 20 }}
+              animate={inView ? { opacity: 1, y: 0 } : {}}
+              transition={{ duration: 0.6 }}
+              className="text-4xl sm:text-5xl font-bold tracking-tight text-midnight mb-6 font-display leading-[1.08]"
+            >
+              Trouble doing due diligence<br />on foreign entities?<br />Now you don&apos;t.
+            </motion.h2>
 
-        <motion.div
-          variants={fadeUp}
-          initial="hidden"
-          animate={inView ? "visible" : "hidden"}
-          transition={{ delay: 0.2 }}
-          className="grid md:grid-cols-2 gap-6 max-w-5xl mx-auto"
-        >
-          <div className="glass rounded-2xl p-7 border border-red-200 hover:border-red-300 transition-all duration-500">
-            <div className="text-xs font-medium tracking-[0.15em] uppercase text-red-500 mb-4 font-sans">
-              Traditional Banks
-            </div>
-            <div className="text-4xl md:text-5xl font-bold font-display text-midnight mb-1">1–3 weeks</div>
-            <div className="text-sm text-silver-dark mb-6 font-sans">to fund an account</div>
-            <ul className="space-y-4">
-              {bankPains.map((item, i) => (
-                <li key={i} className="flex items-start gap-3">
-                  <span className="text-red-500 mt-0.5">{item.icon}</span>
-                  <span className="text-sm text-silver-dark leading-relaxed font-sans">{item.text}</span>
-                </li>
-              ))}
-            </ul>
+            <motion.div
+              initial={{ opacity: 0, y: 16 }}
+              animate={inView ? { opacity: 1, y: 0 } : {}}
+              transition={{ duration: 0.6, delay: 0.1 }}
+              className="space-y-3 text-midnight/60 font-sans text-base leading-relaxed"
+            >
+              <p>The entity is foreign. Your team cannot trace who owns it.</p>
+              <p>Outside counsel takes weeks. So you pass.</p>
+              <p className="font-semibold text-midnight">Bad actors build structures designed to make you give up. Most of the time, they win.</p>
+            </motion.div>
           </div>
 
-          <div className="glass rounded-2xl p-7 border border-accent-blue/20 hover:border-accent-blue/40 transition-all duration-500">
-            <div className="text-xs font-medium tracking-[0.15em] uppercase text-accent-blue mb-4 font-sans">
-              With Syntex
-            </div>
-            <div className="text-4xl md:text-5xl font-bold font-display text-gradient-blue mb-1">&lt;10 mins</div>
-            <div className="text-sm text-silver-dark mb-6 font-sans">to get started</div>
-            <ul className="space-y-4">
-              {syntexAdvantages.map((item, i) => (
-                <li key={i} className="flex items-start gap-3">
-                  <span className="text-accent-blue mt-0.5">{item.icon}</span>
-                  <span className="text-sm text-silver-dark leading-relaxed font-sans">{item.text}</span>
-                </li>
-              ))}
-            </ul>
+          {/* Right: Stat cards */}
+          <div className="space-y-4">
+            {cards.map((card, i) => (
+              <motion.div
+                key={i}
+                initial={{ opacity: 0, x: 20 }}
+                animate={inView ? { opacity: 1, x: 0 } : {}}
+                transition={{ duration: 0.5, delay: 0.1 + i * 0.1 }}
+                className={`rounded-xl p-6 border ${card.style}`}
+              >
+                <div className={`text-4xl font-bold font-display mb-1.5 ${card.numberStyle}`}>
+                  {card.number}
+                </div>
+                <div className="text-sm font-medium text-midnight/60 font-sans">
+                  {card.label}
+                </div>
+              </motion.div>
+            ))}
           </div>
-        </motion.div>
+
+        </div>
       </div>
     </section>
   );

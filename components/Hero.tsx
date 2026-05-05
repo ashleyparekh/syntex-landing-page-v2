@@ -1,212 +1,146 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { useEffect, useState } from "react";
 
-function AnimatedWorkflow() {
-  const [step, setStep] = useState(0);
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setStep((prev) => (prev + 1) % 3);
-    }, 2500);
-    return () => clearInterval(interval);
-  }, []);
-
-  const steps = [
-    {
-      label: "Client Uploads",
-      icon: (
-        <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
-        </svg>
-      ),
-      items: ["Articles of Incorporation", "EIN Letter", "Operating Agreement"],
-    },
-    {
-      label: "AI Verification",
-      icon: (
-        <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
-        </svg>
-      ),
-      items: ["Document classification", "Data extraction", "Compliance check"],
-    },
-    {
-      label: "Dashboard Updated",
-      icon: (
-        <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
-        </svg>
-      ),
-      items: ["Account ready", "RM notified", "Funding initiated"],
-    },
-  ];
-
-  return (
-    <div className="relative w-full max-w-lg mx-auto">
-      <div className="relative glass rounded-2xl p-6 md:p-8">
-        <div className="flex items-center gap-3 mb-6">
-          <div className="flex gap-1.5">
-            <div className="w-3 h-3 rounded-full bg-black/10" />
-            <div className="w-3 h-3 rounded-full bg-black/10" />
-            <div className="w-3 h-3 rounded-full bg-black/10" />
-          </div>
-          <div className="text-xs text-midnight/50 ml-2 tracking-wider uppercase font-sans">Syntex Platform</div>
-        </div>
-
-        <div className="flex justify-between mb-8">
-          {steps.map((s, i) => (
-            <div key={i} className="flex flex-col items-center gap-2 flex-1">
-              <motion.div
-                animate={{ scale: step === i ? 1.1 : 0.9, opacity: step >= i ? 1 : 0.3 }}
-                className={`w-10 h-10 rounded-xl flex items-center justify-center transition-colors duration-500 ${
-                  step === i ? "bg-midnight text-white" : step > i ? "bg-midnight/15 text-midnight" : "bg-black/5 text-midnight/30"
-                }`}
-              >
-                {s.icon}
-              </motion.div>
-              <span className={`text-[10px] md:text-xs tracking-wide transition-colors duration-500 font-sans ${step === i ? "text-midnight" : "text-midnight/30"}`}>
-                {s.label}
-              </span>
-            </div>
-          ))}
-        </div>
-
-        <motion.div
-          key={step}
-          initial={{ opacity: 0, y: 15 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.4 }}
-          className="space-y-3"
-        >
-          {steps[step].items.map((item, i) => (
-            <motion.div
-              key={item}
-              initial={{ opacity: 0, x: -10 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: i * 0.15 }}
-              className="flex items-center gap-3 p-3 rounded-lg bg-black/[0.03] border border-black/[0.06]"
-            >
-              <motion.div
-                initial={{ scale: 0 }}
-                animate={{ scale: 1 }}
-                transition={{ delay: i * 0.15 + 0.2, type: "spring" }}
-                className="w-5 h-5 rounded-full flex items-center justify-center bg-emerald-500/20 text-emerald-600"
-              >
-                <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                </svg>
-              </motion.div>
-              <span className="text-sm text-midnight/80 font-sans">{item}</span>
-            </motion.div>
-          ))}
-        </motion.div>
-
-        <div className="mt-6 flex items-center gap-2">
-          {[0, 1, 2].map((i) => (
-            <div
-              key={i}
-              className={`h-1 rounded-full transition-all duration-500 ${step === i ? "w-8 bg-accent-blue" : "w-2 bg-black/15"}`}
-            />
-          ))}
-        </div>
-      </div>
-    </div>
-  );
-}
-
-const fadeUp = {
-  hidden: { opacity: 0, y: 30 },
-  visible: (i: number) => ({
-    opacity: 1,
-    y: 0,
-    transition: { delay: i * 0.15, duration: 0.7, ease: "easeOut" },
-  }),
-};
+const stats = [
+  { stat: "Minutes", label: "from upload to resolution" },
+  { stat: "60 pages", label: "of foreign docs, read in full" },
+  { stat: "Any language", label: "formation docs, any jurisdiction" },
+];
 
 export default function Hero() {
   return (
-    <section className="relative min-h-screen flex items-center pt-20 overflow-hidden">
-      <div className="absolute inset-0">
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[900px] h-[900px] bg-gradient-radial from-accent-blue/[0.07] via-accent-blue/[0.03] to-transparent" />
-        <div className="absolute bottom-0 right-0 w-[600px] h-[600px] bg-gradient-radial from-accent-blue/[0.05] via-transparent to-transparent" />
-      </div>
+    <section className="min-h-screen flex items-center pt-20 bg-white overflow-hidden">
+        <div className="max-w-7xl mx-auto px-6 py-10 md:py-16 w-full">
+        <div className="grid lg:grid-cols-2 gap-16 items-center">
 
-      <div className="relative max-w-7xl mx-auto px-6 py-10 md:py-20 w-full">
-        <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
-          <div>
-            <motion.div custom={0} variants={fadeUp} initial="hidden" animate="visible" className="flex items-center gap-2 mb-6">
-              <div className="h-px w-12 bg-gradient-to-r from-accent-blue/70 to-transparent" />
-              <span className="text-xs font-medium tracking-[0.2em] uppercase text-accent-blue font-sans">
-                The Next Generation Technology for Banking
+          {/* Left: Copy */}
+          <motion.div
+            initial={{ opacity: 0, y: 24 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+          >
+            <div className="inline-flex items-center gap-2 mb-8 px-3 py-1.5 rounded-full border border-black/10 bg-black/[0.03]">
+              <div className="w-1.5 h-1.5 rounded-full bg-accent-blue animate-pulse" />
+              <span className="text-xs font-medium text-midnight/50 font-sans tracking-wide">
+                Agentic AI for Financial Institutions
               </span>
-            </motion.div>
+            </div>
 
-            <motion.h1 custom={1} variants={fadeUp} initial="hidden" animate="visible"
-              className="text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold leading-[1.05] tracking-tight mb-6 text-midnight">
-              Fund Businesses
-              <br />
-              in Minutes,{" "}
-              <span className="text-gradient-blue">Not Weeks.</span>
-            </motion.h1>
+            <h1 className="text-5xl sm:text-6xl lg:text-[64px] font-bold leading-[1.06] tracking-tight mb-6 text-midnight font-display">
+              Stop turning down<br />foreign entity deals.
+            </h1>
 
-            <motion.p custom={2} variants={fadeUp} initial="hidden" animate="visible"
-              className="text-base text-silver-dark leading-relaxed max-w-xl mb-8 font-sans">
-              Syntex is an AI-powered onboarding platform that helps banks and
-              credit unions collect, verify, and process client documents faster.
-            </motion.p>
+            <p className="text-lg text-midnight/55 leading-relaxed max-w-lg mb-10 font-sans">
+              AI agents that read foreign formation documents, trace multi-layer ownership chains, and surface every risk structure. Automatically.
+            </p>
 
-            <motion.div custom={3} variants={fadeUp} initial="hidden" animate="visible" className="flex flex-wrap gap-4 mb-8">
-              <a
+            <div className="flex flex-wrap items-center gap-4 mb-14">
+              <motion.a
                 href="https://calendly.com/ashleyparekh"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="group relative px-8 py-4 bg-midnight text-white font-semibold rounded-xl text-sm hover:shadow-[0_8px_30px_rgba(74,145,255,0.25)] transition-all duration-300"
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                className="px-8 py-4 bg-midnight text-white font-semibold rounded-xl text-sm font-sans"
               >
                 Book a Demo
-                <span className="inline-block ml-2 group-hover:translate-x-1 transition-transform">&rarr;</span>
-              </a>
-            </motion.div>
+              </motion.a>
+            </div>
 
-            <motion.div custom={4} variants={fadeUp} initial="hidden" animate="visible" className="flex flex-wrap gap-4 mb-8">
-              {[
-                { value: "70%", label: "Faster Onboarding" },
-                { value: "40%", label: "Higher Conversion" },
-              ].map((stat) => (
-                <div
-                  key={stat.value}
-                  className="flex items-center gap-3 px-5 py-3 rounded-xl border border-accent-blue/20 bg-accent-blue/[0.05]"
-                >
-                  <span className="text-2xl font-bold text-gradient-blue font-display">{stat.value}</span>
-                  <span className="text-xs text-silver-dark leading-tight font-sans">{stat.label}</span>
+            <div className="flex flex-wrap gap-10 pt-8 border-t border-black/[0.07]">
+              {stats.map((item) => (
+                <div key={item.stat}>
+                  <div className="text-2xl font-bold text-midnight font-display">{item.stat}</div>
+                  <div className="text-xs text-midnight/35 font-sans mt-0.5">{item.label}</div>
                 </div>
               ))}
-            </motion.div>
-
-            <motion.div custom={5} variants={fadeUp} initial="hidden" animate="visible" className="flex items-center gap-3">
-              <span className="text-[10px] text-midnight/40 tracking-[0.15em] uppercase font-sans shrink-0">Built for</span>
-              <div className="h-px flex-1 bg-black/10" />
-              <div className="flex items-center gap-2">
-                <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg border border-black/10 bg-black/[0.03] group hover:border-accent-blue/40 hover:bg-accent-blue/[0.05] transition-all duration-300">
-                  <svg className="w-4 h-4 text-midnight/50 group-hover:text-accent-blue transition-colors shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M8 14v3m4-3v3m4-3v3M3 21h18M3 10h18M3 7l9-4 9 4M4 10h16v11H4V10z" />
-                  </svg>
-                  <span className="text-[11px] text-midnight/50 group-hover:text-midnight transition-colors font-sans">Community Banks</span>
-                </div>
-                <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg border border-black/10 bg-black/[0.03] group hover:border-accent-blue/40 hover:bg-accent-blue/[0.05] transition-all duration-300">
-                  <svg className="w-4 h-4 text-midnight/50 group-hover:text-accent-blue transition-colors shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z" />
-                  </svg>
-                  <span className="text-[11px] text-midnight/50 group-hover:text-midnight transition-colors font-sans">Credit Unions</span>
-                </div>
-              </div>
-            </motion.div>
-          </div>
-
-          <motion.div custom={2} variants={fadeUp} initial="hidden" animate="visible">
-            <AnimatedWorkflow />
+            </div>
           </motion.div>
+
+          {/* Right: Agent output card */}
+          <motion.div
+            initial={{ opacity: 0, x: 30 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.7, delay: 0.2 }}
+            className="hidden lg:block"
+          >
+            <div className="rounded-2xl border border-black/[0.08] bg-white shadow-[0_4px_40px_rgba(0,0,0,0.07)] overflow-hidden max-w-md ml-auto">
+              {/* Header */}
+              <div className="px-5 py-4 border-b border-black/[0.06] flex items-center justify-between bg-black/[0.015]">
+                <div className="flex items-center gap-2">
+                  <div className="w-2 h-2 rounded-full bg-accent-blue animate-pulse" />
+                  <span className="text-xs font-semibold text-midnight font-sans">Agent Analysis</span>
+                </div>
+                <span className="text-[10px] text-midnight/35 font-sans">Meridian Capital Partners · BVI</span>
+              </div>
+
+              {/* Document list */}
+              <div className="px-5 py-4 border-b border-black/[0.06] space-y-2.5">
+                <div className="text-[10px] font-medium tracking-[0.18em] uppercase text-midnight/30 font-sans mb-3">Uploaded Documents</div>
+                {[
+                  { name: "BVI_Formation_Agreement.pdf", pages: "60 pages", status: "done" },
+                  { name: "Operating_Agreement_ES.pdf", pages: "Spanish · Auto-translated", status: "done" },
+                  { name: "Shareholder_Registry.pdf", pages: "14 pages", status: "done" },
+                  { name: "Beneficial_Owner_Cert.pdf", pages: "Required · Missing", status: "missing" },
+                ].map((doc, i) => (
+                  <div key={i} className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <svg className="w-3.5 h-3.5 text-midnight/30 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                      </svg>
+                      <div>
+                        <div className="text-[11px] font-medium text-midnight font-sans">{doc.name}</div>
+                        <div className="text-[10px] text-midnight/35 font-sans">{doc.pages}</div>
+                      </div>
+                    </div>
+                    {doc.status === "done" ? (
+                      <div className="w-4 h-4 rounded-full bg-emerald-100 flex items-center justify-center shrink-0">
+                        <svg className="w-2.5 h-2.5 text-emerald-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
+                        </svg>
+                      </div>
+                    ) : (
+                      <div className="w-4 h-4 rounded-full bg-amber-100 flex items-center justify-center shrink-0">
+                        <svg className="w-2.5 h-2.5 text-amber-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M12 9v4m0 4h.01" />
+                        </svg>
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
+
+              {/* Agent reasoning */}
+              <div className="px-5 py-4 border-b border-black/[0.06] space-y-2">
+                <div className="text-[10px] font-medium tracking-[0.18em] uppercase text-midnight/30 font-sans mb-3">Agent Reasoning</div>
+                {[
+                  { icon: "trace", text: "Ownership chain: 4 layers resolved", type: "ok" },
+                  { icon: "lang", text: "Spanish document translated and parsed", type: "ok" },
+                  { icon: "flag", text: "Nominee director detected at Layer 2", type: "warn" },
+                  { icon: "flag", text: "Beneficial Owner Certificate missing", type: "warn" },
+                  { icon: "resolve", text: "2 UBOs identified above 25% threshold", type: "ok" },
+                ].map((item, i) => (
+                  <div key={i} className="flex items-start gap-2">
+                    <div className={`mt-0.5 w-1.5 h-1.5 rounded-full shrink-0 ${item.type === "warn" ? "bg-amber-400" : "bg-emerald-500"}`} />
+                    <span className={`text-[11px] font-sans ${item.type === "warn" ? "text-amber-700" : "text-midnight/60"}`}>
+                      {item.text}
+                    </span>
+                  </div>
+                ))}
+              </div>
+
+              {/* Footer */}
+              <div className="px-5 py-3.5 flex items-center justify-between bg-black/[0.015]">
+                <div className="flex items-center gap-1.5">
+                  <div className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
+                  <span className="text-[10px] font-semibold text-emerald-700 font-sans">Resolved in 6 minutes</span>
+                </div>
+                <span className="text-[10px] font-semibold text-accent-blue font-sans">View full report</span>
+              </div>
+            </div>
+          </motion.div>
+
         </div>
       </div>
     </section>
