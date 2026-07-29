@@ -1,42 +1,95 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import { SITE_URL } from "@/lib/site";
 
-export const metadata: Metadata = {
-  title: "Syntex — commercial due diligence for Foreign Entities at Private Lenders",
-  description:
-    "Syntex runs AI-powered commercial due diligence on any foreign entity in minutes. Multi-layer ownership chains, foreign formation documents, complete beneficial ownership resolution. Built for private lenders.",
-  keywords: [
-    "commercial due diligence foreign entities private lenders",
-    "beneficial ownership resolution",
-    "foreign entity compliance",
-    "private lender commercial due diligence software",
-    "AI compliance for private credit",
-    "foreign entity due diligence",
-  ],
-  openGraph: {
-    title: "Syntex — Stop Turning Down Foreign Entity Deals",
-    description:
-      "AI agents that read foreign formation documents, trace multi-layer ownership chains, and deliver a complete beneficial ownership resolution. $300 vs $5,000 at a law firm.",
-    type: "website",
-    siteName: "Syntex",
-  },
-  robots: { index: true, follow: true },
+const TITLE =
+  "Syntex — AI-native KYB orchestration for cross-border stablecoin payments";
+const DESCRIPTION =
+  "Syntex translates KYB documents across vendor formats and routes them to all your infrastructure partners automatically. Built for US cross-border stablecoin payment companies operating in India, Mexico, and the Philippines.";
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  themeColor: "#000000",
 };
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export const metadata: Metadata = {
+  title: {
+    default: TITLE,
+    template: "%s — Syntex",
+  },
+  description: DESCRIPTION,
+  keywords: [
+    "KYB orchestration",
+    "cross-border stablecoin compliance",
+    "Aadhaar KYB",
+    "US-India payments compliance",
+    "US-Mexico KYB",
+    "stablecoin KYB vendor",
+    "cross-border business verification",
+    "PhilSys KYB",
+    "CURP business verification",
+  ],
+  alternates: {
+    canonical: SITE_URL,
+    languages: {
+      "en-US": SITE_URL,
+    },
+  },
+  openGraph: {
+    title: TITLE,
+    description: DESCRIPTION,
+    type: "website",
+    siteName: "Syntex",
+    url: SITE_URL,
+    locale: "en_US",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: TITLE,
+    description: DESCRIPTION,
+  },
+  robots: { index: true, follow: true },
+  metadataBase: new URL(SITE_URL),
+};
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  name: "Syntex",
+  description: DESCRIPTION,
+  applicationCategory: "FinancialApplication",
+  operatingSystem: "Web",
+  url: SITE_URL,
+};
+
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
-    <html lang="en" className="antialiased">
+    <html lang="en-US" className="antialiased">
       <head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link
-          href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap"
+          rel="preconnect"
+          href="https://fonts.gstatic.com"
+          crossOrigin="anonymous"
+        />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=Space+Grotesk:wght@400;500;600&display=swap"
           rel="stylesheet"
         />
+        <link rel="alternate" hrefLang="en-US" href={SITE_URL} />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
       </head>
-      <body className="bg-white text-midnight">
+      <body className="bg-ink text-paper">
         <Navbar />
         {children}
         <Footer />

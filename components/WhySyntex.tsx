@@ -5,16 +5,20 @@ import { useRef } from "react";
 
 const differentiators = [
   {
-    title: "Built for exactly this.",
-    body: "We do one thing: commercial due diligence for foreign entities at private lenders. Not a feature buried in a bigger platform. Not a law firm moonlighting in tech. One product, built for your exact workflow.",
+    title: "Collect once, route to all.",
+    body: "Most fintechs re-verify the same client for each infrastructure partner. Syntex collects documents once through a single intake and pushes verified data to every partner via API. The client never gets asked again.",
   },
   {
-    title: "Detect fraud early.",
-    body: "Bad actors layer shells specifically because most teams stop looking. Our agents trace every layer, flag nominee directors, and surface circular ownership structures before they reach your credit committee.",
+    title: "We read documents. We do not just look up registries.",
+    body: "Every major KYB vendor resolves ownership through public registries. That works for simple structures. It does not work for Indian HUFs, multi-layer LLPs, or family trusts. We read the underlying legal documents and trace ownership through them.",
   },
   {
-    title: "Agents move faster than humans.",
-    body: "A compliance team takes weeks. Our agents take minutes. The same depth of analysis, without the bottleneck. Your deal does not wait on a review queue.",
+    title: "RFIs stop at Syntex.",
+    body: "When a partner sends a request for information, we handle it. We collect the additional documents directly from the client and submit them back to the partner. The fintech does not touch compliance email.",
+  },
+  {
+    title: "Every decision is documented.",
+    body: "We produce an audit-ready compliance verdict for each entity. It includes the source documents we read, the reasoning we applied, and the ownership chain we resolved. Your legal team can read it. Your partners can accept it.",
   },
 ];
 
@@ -40,16 +44,16 @@ export default function WhySyntex() {
           </h2>
         </motion.div>
 
-        <div className="grid md:grid-cols-3 gap-5 mb-8">
+        <div className="grid md:grid-cols-2 gap-5">
           {differentiators.map((item, i) => (
             <motion.div
               key={i}
               initial={{ opacity: 0, y: 20 }}
               animate={inView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.5, delay: 0.1 + i * 0.12 }}
+              transition={{ duration: 0.5, delay: 0.1 + i * 0.1 }}
               className="rounded-xl p-7 bg-white border border-black/[0.07]"
             >
-              <h3 className="text-xl font-bold text-midnight font-display mb-4 leading-tight">
+              <h3 className="text-lg font-bold text-midnight font-display mb-3 leading-snug">
                 {item.title}
               </h3>
               <p className="text-sm text-midnight/60 font-sans leading-relaxed">
@@ -58,7 +62,6 @@ export default function WhySyntex() {
             </motion.div>
           ))}
         </div>
-
 
       </div>
     </section>

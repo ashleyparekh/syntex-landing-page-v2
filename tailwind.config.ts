@@ -8,30 +8,24 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        midnight: "#0A0A0A",
-        silver: "#C0C0C0",
-        "deep-blue": "#0B1F3B",
-        "silver-light": "#E8E8E8",
-        "silver-dark": "#555555",
-        "accent-blue": "#1D56D8",
+        ink: "#000000",
+        paper: "#FFFFFF",
+        mist: "#E0E0E0",
+        fog: "#B0B0B0",
+        border: "#1A1A1A",
       },
       fontFamily: {
         sans: ["'Inter'", "system-ui", "sans-serif"],
-        display: ["'Instrument Serif'", "Georgia", "serif"],
-        mono: ["'Courier Prime'", "'Courier New'", "monospace"],
-      },
-      backgroundImage: {
-        "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
-      },
-      animation: {
-        "pulse-slow": "pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite",
-        "float": "float 6s ease-in-out infinite",
+        display: ["'Space Grotesk'", "system-ui", "sans-serif"],
       },
       keyframes: {
-        float: {
-          "0%, 100%": { transform: "translateY(0px)" },
-          "50%": { transform: "translateY(-20px)" },
+        "fade-up": {
+          "0%": { opacity: "0", transform: "translateY(16px)" },
+          "100%": { opacity: "1", transform: "translateY(0)" },
         },
+      },
+      animation: {
+        "fade-up": "fade-up 0.7s ease forwards",
       },
     },
   },

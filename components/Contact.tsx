@@ -14,7 +14,7 @@ export default function Contact() {
   const inView = useInView(ref, { once: true, margin: "-80px" });
 
   return (
-    <section ref={ref} className="py-14 md:py-20 bg-white border-t border-black/[0.06]">
+    <section id="contact" ref={ref} className="py-14 md:py-20 bg-white border-t border-black/[0.06]">
       <div className="max-w-7xl mx-auto px-6">
 
         {/* Finovate photo */}

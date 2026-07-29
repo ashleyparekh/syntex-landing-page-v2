@@ -12,7 +12,7 @@ const quotes = [
   {
     quote: "Syntex cut our KYB turnaround from three weeks to same-day. That is not an improvement. That is a different business.",
     name: "COO",
-    company: "Bridge lender, Southeast US",
+    company: "Regional lender, Southeast US",
   },
 ];
 

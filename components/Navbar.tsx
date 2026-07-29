@@ -1,115 +1,74 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import Image from "next/image";
+import { useState } from "react";
 import Link from "next/link";
+import { RequestAccessNavLink } from "@/components/RequestAccessButton";
+
+const links = [
+  { href: "/the-gap", label: "The Gap" },
+  { href: "/how-it-works", label: "How it Works" },
+  { href: "/who-its-for", label: "Who it's For" },
+  { href: "/corridors", label: "Corridors" },
+  { href: "/blog", label: "Blog" },
+  { href: "/contact", label: "Contact" },
+];
 
 export default function Navbar() {
-  const [scrolled, setScrolled] = useState(false);
-  const [mobileOpen, setMobileOpen] = useState(false);
-
-  useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 40);
-    window.addEventListener("scroll", onScroll);
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
-
-  const links = [
-    { label: "How It Works", href: "/#how-it-works" },
-    { label: "Why Syntex", href: "/#why-syntex" },
-    { label: "Blog", href: "/blog" },
-  ];
+  const [open, setOpen] = useState(false);
 
   return (
-    <motion.nav
-      initial={{ y: -100 }}
-      animate={{ y: 0 }}
-      transition={{ duration: 0.6, ease: "easeOut" }}
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
-        scrolled ? "bg-white/90 backdrop-blur-xl border-b border-black/[0.06] shadow-sm" : "bg-transparent"
-      }`}
-    >
-      <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
-        <Link href="/" className="flex items-center gap-3 group">
-          <Image
-            src="/logo.png"
-            alt="Syntex"
-            width={36}
-            height={36}
-            className="opacity-90 group-hover:opacity-100 transition-opacity"
-          />
-          <span className="font-sans text-sm font-semibold tracking-[0.2em] uppercase text-midnight">
-            SYNTEX
-          </span>
+    <header className="fixed inset-x-0 top-0 z-50 border-b border-transparent bg-ink/80 backdrop-blur-md">
+      <nav className="section-pad mx-auto flex h-14 max-w-6xl items-center justify-between gap-4">
+        <Link
+          href="/"
+          className="shrink-0 font-display text-sm tracking-wide text-paper"
+        >
+          SYNTEX
         </Link>
 
-        <div className="hidden md:flex items-center gap-8">
+        <div className="hidden items-center gap-5 md:flex">
           {links.map((link) => (
             <Link
               key={link.href}
               href={link.href}
-              className="text-sm text-silver-dark hover:text-midnight transition-colors duration-300 tracking-wide"
+              className="whitespace-nowrap text-sm text-mist transition-colors hover:text-paper"
             >
               {link.label}
             </Link>
           ))}
-        </div>
-
-        <div className="hidden md:flex items-center gap-4">
-          <a
-            href="https://calendly.com/ashleyparekh"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="px-6 py-2.5 text-sm font-medium text-white bg-midnight rounded-lg hover:bg-midnight/80 transition-all duration-300"
-          >
-            Book a Demo
-          </a>
+          <RequestAccessNavLink className="shrink-0 border border-paper/30 px-3.5 py-1.5 text-sm text-paper transition-colors hover:border-paper hover:bg-paper hover:text-ink" />
         </div>
 
         <button
-          onClick={() => setMobileOpen(!mobileOpen)}
-          className="md:hidden flex flex-col gap-1.5 p-2"
+          type="button"
+          className="text-sm text-mist md:hidden"
           aria-label="Toggle menu"
+          onClick={() => setOpen((v) => !v)}
         >
-          <span className={`block w-6 h-px bg-midnight transition-transform duration-300 ${mobileOpen ? "rotate-45 translate-y-[3.5px]" : ""}`} />
-          <span className={`block w-6 h-px bg-midnight transition-opacity duration-300 ${mobileOpen ? "opacity-0" : ""}`} />
-          <span className={`block w-6 h-px bg-midnight transition-transform duration-300 ${mobileOpen ? "-rotate-45 -translate-y-[3.5px]" : ""}`} />
+          {open ? "Close" : "Menu"}
         </button>
-      </div>
+      </nav>
 
-      <AnimatePresence>
-        {mobileOpen && (
-          <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: "auto" }}
-            exit={{ opacity: 0, height: 0 }}
-            className="md:hidden bg-white/95 backdrop-blur-xl border-b border-black/[0.06]"
-          >
-            <div className="px-6 py-6 flex flex-col gap-4">
-              {links.map((link) => (
-                <Link
-                  key={link.href}
-                  href={link.href}
-                  onClick={() => setMobileOpen(false)}
-                  className="text-silver-dark hover:text-midnight transition-colors py-2"
-                >
-                  {link.label}
-                </Link>
-              ))}
-              <a
-                href="https://calendly.com/ashleyparekh"
-                target="_blank"
-                rel="noopener noreferrer"
-                onClick={() => setMobileOpen(false)}
-                className="mt-2 px-6 py-3 text-sm font-medium text-white bg-midnight rounded-lg text-center"
+      {open && (
+        <div className="border-t border-border bg-ink px-6 py-4 md:hidden">
+          <div className="flex flex-col gap-4">
+            {links.map((link) => (
+              <Link
+                key={link.href}
+                href={link.href}
+                className="text-sm text-mist"
+                onClick={() => setOpen(false)}
               >
-                Book a Demo
-              </a>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </motion.nav>
+                {link.label}
+              </Link>
+            ))}
+            <RequestAccessNavLink
+              className="text-sm text-paper"
+              onClick={() => setOpen(false)}
+            />
+          </div>
+        </div>
+      )}
+    </header>
   );
 }

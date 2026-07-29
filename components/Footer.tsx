@@ -1,40 +1,50 @@
-"use client";
-
-import Image from "next/image";
 import Link from "next/link";
+import LinkedInButton from "@/components/LinkedInButton";
+import { CONTACT_EMAIL, companyLine } from "@/lib/site";
+
+const links = [
+  { href: "/the-gap", label: "The Gap" },
+  { href: "/how-it-works", label: "How it Works" },
+  { href: "/who-its-for", label: "Who it's For" },
+  { href: "/corridors", label: "Corridors" },
+  { href: "/blog", label: "Blog" },
+  { href: "/contact", label: "Contact" },
+];
 
 export default function Footer() {
   return (
-    <footer className="border-t border-black/[0.06] py-12 bg-white">
-      <div className="max-w-7xl mx-auto px-6">
-        <div className="flex flex-col md:flex-row items-center justify-between gap-6">
-          <div className="flex items-center gap-3">
-            <Image src="/logo.png" alt="Syntex" width={24} height={24} className="opacity-70" />
-            <span className="font-sans text-sm text-silver-dark font-medium">Syntex</span>
-          </div>
+    <footer className="section-pad border-t border-border bg-ink py-12">
+      <div className="mx-auto grid max-w-6xl gap-10 md:grid-cols-[1.2fr_1fr_auto]">
+        <div>
+          <Link href="/" className="font-display text-sm tracking-wide text-paper">
+            SYNTEX
+          </Link>
+          <p className="mt-3 max-w-sm text-sm leading-relaxed text-mist">
+            {companyLine}
+          </p>
+        </div>
 
-          <div className="flex items-center gap-8">
-            <a href="/#how-it-works" className="text-xs text-silver-dark hover:text-midnight transition-colors font-sans">How It Works</a>
-            <a href="/#why-syntex" className="text-xs text-silver-dark hover:text-midnight transition-colors font-sans">Why Syntex</a>
-            <Link href="/blog" className="text-xs text-silver-dark hover:text-midnight transition-colors font-sans">Blog</Link>
-          </div>
-
-          <div className="flex items-center gap-4">
-            <a
-              href="https://www.linkedin.com/company/syntex-pro/"
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label="LinkedIn"
-              className="text-silver-dark/60 hover:text-midnight transition-colors duration-300"
+        <nav className="flex flex-wrap gap-x-5 gap-y-2 text-sm text-mist">
+          {links.map((link) => (
+            <Link
+              key={link.href}
+              href={link.href}
+              className="transition-colors hover:text-paper"
             >
-              <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
-              </svg>
-            </a>
-            <div className="text-xs text-silver-dark/60 font-sans">
-              &copy; {new Date().getFullYear()} Syntex Inc. All rights reserved.
-            </div>
-          </div>
+              {link.label}
+            </Link>
+          ))}
+        </nav>
+
+        <div className="flex flex-col items-start gap-3 text-sm text-mist">
+          <a
+            href={`mailto:${CONTACT_EMAIL}`}
+            className="transition-colors hover:text-paper"
+          >
+            {CONTACT_EMAIL}
+          </a>
+          <LinkedInButton />
+          <span className="text-fog">© {new Date().getFullYear()}</span>
         </div>
       </div>
     </footer>

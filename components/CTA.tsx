@@ -2,47 +2,44 @@
 
 import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
+import RequestAccessButton from "@/components/RequestAccessButton";
 
 export default function CTA() {
   const ref = useRef(null);
-  const inView = useInView(ref, { once: true, margin: "-100px" });
+  const inView = useInView(ref, { once: true, amount: 0.4 });
 
   return (
-    <section id="cta" ref={ref} className="relative py-14 md:py-20 bg-midnight overflow-hidden">
-      <div className="absolute inset-0 bg-gradient-radial from-white/[0.04] via-transparent to-transparent" />
+    <section
+      id="access"
+      className="section-pad relative overflow-hidden border-t border-white/[0.06] bg-ink py-16 md:py-24"
+    >
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_50%_120%,rgba(255,255,255,0.06),transparent_50%)]" />
+      <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/25 to-transparent" />
 
-      <div className="relative max-w-4xl mx-auto px-6 text-center">
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
+      <div className="relative mx-auto max-w-2xl text-center" ref={ref}>
+        <motion.h2
+          initial={{ opacity: 0, y: 16 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.7 }}
+          className="font-display text-3xl text-paper md:text-5xl"
         >
-          <div className="inline-flex items-center gap-2 mb-8 px-3 py-1.5 rounded-full border border-white/10 bg-white/[0.04]">
-            <div className="w-1.5 h-1.5 rounded-full bg-accent-blue animate-pulse" />
-            <span className="text-xs font-medium text-white/50 font-sans tracking-wide">
-              Agentic AI for financial institutions
-            </span>
-          </div>
-
-          <h2 className="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight mb-5 text-white font-display leading-[1.06]">
-            Your next foreign entity deal<br />does not need a law firm.
-          </h2>
-          <p className="text-base text-white/45 mb-10 max-w-md mx-auto leading-relaxed font-sans">
-            Deploy Syntex agents. Get a complete ownership resolution before your next credit call.
-          </p>
-          <motion.a
-            href="https://calendly.com/ashleyparekh"
-            target="_blank"
-            rel="noopener noreferrer"
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.98 }}
-            className="inline-flex items-center gap-2 px-10 py-5 bg-white text-midnight font-semibold rounded-xl text-base font-sans"
-          >
-            Book a Demo
-            <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-            </svg>
-          </motion.a>
+          Book a demo
+        </motion.h2>
+        <motion.p
+          initial={{ opacity: 0, y: 12 }}
+          animate={inView ? { opacity: 1, y: 0 } : {}}
+          transition={{ delay: 0.1 }}
+          className="mx-auto mt-5 max-w-md text-base text-mist"
+        >
+          Tell us which corridors you run and which infrastructure partners you
+          clear through.
+        </motion.p>
+        <motion.div
+          initial={{ opacity: 0, y: 12 }}
+          animate={inView ? { opacity: 1, y: 0 } : {}}
+          transition={{ delay: 0.2 }}
+          className="mt-8"
+        >
+          <RequestAccessButton variant="solid">Book a demo</RequestAccessButton>
         </motion.div>
       </div>
     </section>
