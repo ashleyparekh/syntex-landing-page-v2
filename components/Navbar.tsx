@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { RequestAccessNavLink } from "@/components/RequestAccessButton";
+import { useGlobeExperienceOptional } from "@/components/GlobeExperience";
 
 const links = [
   { href: "/the-gap", label: "The Gap" },
@@ -15,16 +16,24 @@ const links = [
 
 export default function Navbar() {
   const [open, setOpen] = useState(false);
+  const globe = useGlobeExperienceOptional();
 
   return (
     <header className="fixed inset-x-0 top-0 z-50 border-b border-transparent bg-ink/80 backdrop-blur-md">
       <nav className="section-pad mx-auto flex h-14 max-w-6xl items-center justify-between gap-4">
-        <Link
-          href="/"
-          className="shrink-0 font-display text-sm tracking-wide text-paper"
-        >
-          SYNTEX
-        </Link>
+        <div className="flex items-center gap-2.5">
+          <div
+            ref={globe?.navSlotRef}
+            className="relative h-[30px] w-[30px] shrink-0"
+            aria-hidden
+          />
+          <Link
+            href="/"
+            className="shrink-0 font-display text-sm tracking-wide text-paper"
+          >
+            SYNTEX
+          </Link>
+        </div>
 
         <div className="hidden items-center gap-5 md:flex">
           {links.map((link) => (

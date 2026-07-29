@@ -2,6 +2,8 @@ import type { Metadata, Viewport } from "next";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import GlobeExperienceProvider from "@/components/GlobeExperience";
+import GlobeHost from "@/components/GlobeHost";
 import { SITE_URL } from "@/lib/site";
 
 const TITLE =
@@ -80,7 +82,7 @@ export default function RootLayout({
           crossOrigin="anonymous"
         />
         <link
-          href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=Space+Grotesk:wght@400;500;600&display=swap"
+          href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@1,400;1,500&family=Inter:wght@400;500&family=Space+Grotesk:wght@300;400;500;600&display=swap"
           rel="stylesheet"
         />
         <link rel="alternate" hrefLang="en-US" href={SITE_URL} />
@@ -90,9 +92,12 @@ export default function RootLayout({
         />
       </head>
       <body className="bg-ink text-paper">
-        <Navbar />
-        {children}
-        <Footer />
+        <GlobeExperienceProvider>
+          <GlobeHost />
+          <Navbar />
+          {children}
+          <Footer />
+        </GlobeExperienceProvider>
       </body>
     </html>
   );

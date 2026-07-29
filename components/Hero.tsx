@@ -1,49 +1,57 @@
 "use client";
 
-import dynamic from "next/dynamic";
 import RequestAccessButton from "@/components/RequestAccessButton";
-
-const Globe = dynamic(() => import("@/components/Globe"), {
-  ssr: false,
-  loading: () => (
-    <div
-      className="flex aspect-square w-full items-center justify-center"
-      aria-hidden
-    >
-      <span className="font-display text-sm text-fog">Loading globe…</span>
-    </div>
-  ),
-});
+import { useGlobeExperience } from "@/components/GlobeExperience";
 
 export default function Hero() {
+  const { heroSectionRef, heroSlotRef, parallaxY } = useGlobeExperience();
+
   return (
-    <section className="relative min-h-[100svh] bg-ink">
-      <div className="section-pad relative z-10 mx-auto flex min-h-[100svh] max-w-6xl flex-col gap-8 pt-24 pb-10 md:grid md:grid-cols-[minmax(0,0.38fr)_minmax(0,0.62fr)] md:items-center md:gap-6 md:pt-20 md:pb-10">
-        <div className="relative z-10 max-w-md shrink-0">
-          <p className="font-display text-xs tracking-[0.2em] text-mist sm:text-sm">
-            SYNTEX
+    <section
+      ref={heroSectionRef}
+      className="relative min-h-[100svh] overflow-hidden bg-ink"
+    >
+      {/* Globe — dominant visual plane */}
+      <div className="pointer-events-none absolute inset-0 z-0 flex items-center justify-center md:justify-end md:pr-6 lg:pr-14 xl:pr-20">
+        <div
+          ref={heroSlotRef}
+          className="pointer-events-auto relative aspect-square w-[min(92vw,78svh,720px)]"
+          aria-label="Interactive 3D globe showing example payment corridors"
+        />
+      </div>
+
+      {/* Text zones — pointer-events-none so globe hover works underneath */}
+      <div className="section-pad pointer-events-none relative z-[70] mx-auto flex min-h-[100svh] max-w-6xl flex-col justify-between pt-28 pb-12 md:pt-32 md:pb-16">
+        {/* Zone 1 — top left: stacked typographic sandwich */}
+        <h1
+          className="hero-tagline"
+          style={{
+            transform: `translate3d(0, ${parallaxY * 0.35}px, 0)`,
+            transition: "transform 80ms linear",
+          }}
+        >
+          <span className="hero-tagline__sans">KYB</span>
+          <span className="hero-tagline__serif">without</span>
+          <span className="hero-tagline__sans">borders.</span>
+        </h1>
+
+        {/* Zone 2 — bottom left caption */}
+        <div
+          className="max-w-md will-change-transform"
+          style={{
+            transform: `translate3d(0, ${parallaxY}px, 0)`,
+            transition: "transform 80ms linear",
+          }}
+        >
+          <p className="font-display text-base leading-snug tracking-tight text-paper md:text-lg">
+            AI-native KYB orchestration for cross-border stablecoin payments.
           </p>
-          <h1 className="mt-3 font-display text-xl tracking-tight text-paper sm:text-2xl md:text-[1.65rem] md:leading-snug lg:text-[1.85rem]">
-            AI-native KYB orchestration for cross-border stablecoin payments
-          </h1>
-          <p className="mt-3 text-sm leading-relaxed text-mist md:text-[0.95rem]">
+          <p className="mt-2 font-display text-sm leading-relaxed text-[#999] md:text-[0.95rem]">
             Translate KYB documents across vendor formats and route them to
             every infrastructure partner from one input.
           </p>
-          <div className="mt-6">
+          <div className="pointer-events-auto mt-5">
             <RequestAccessButton />
-          </div>
-          <p className="mt-8 text-[11px] text-fog">
-            Hover a country for ID and regulator context.
-          </p>
-        </div>
-
-        <div className="relative flex w-full items-center justify-center md:justify-end">
-          <div
-            className="relative w-full max-w-[min(100%,78svh,680px)]"
-            aria-label="Interactive 3D globe showing example payment corridors"
-          >
-            <Globe />
           </div>
         </div>
       </div>

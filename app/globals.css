@@ -46,6 +46,31 @@ h4 {
   font-weight: 500;
 }
 
+.hero-tagline {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  max-width: 400px;
+  line-height: 0.88;
+  letter-spacing: -0.03em;
+}
+
+.hero-tagline__sans {
+  font-family: "Space Grotesk", system-ui, sans-serif;
+  font-weight: 300;
+  font-size: clamp(2.5rem, 7.5vw, 4.5rem); /* up to 72px */
+  color: #ffffff;
+}
+
+.hero-tagline__serif {
+  font-family: "Cormorant Garamond", Georgia, serif;
+  font-weight: 400;
+  font-style: italic;
+  font-size: clamp(3rem, 9vw, 5.5rem); /* up to 88px */
+  color: #c0c0c0;
+  margin-block: -0.04em;
+}
+
 ::selection {
   background: rgba(255, 255, 255, 0.15);
   color: #ffffff;
@@ -99,4 +124,64 @@ h4 {
 
 .pulse-node {
   animation: pulse-node 2.4s ease-in-out infinite;
+}
+
+/* One-shot metallic glint across the hero headline */
+.headline-shimmer {
+  position: relative;
+  display: inline;
+  background-image: linear-gradient(
+    100deg,
+    #ffffff 0%,
+    #ffffff 40%,
+    #ffffff 50%,
+    #ffffff 60%,
+    #ffffff 100%
+  );
+  background-size: 100% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+}
+
+.headline-shimmer--run {
+  animation: headline-glint 800ms cubic-bezier(0.4, 0, 0.2, 1) 1;
+}
+
+@keyframes headline-glint {
+  0% {
+    background-image: linear-gradient(
+      100deg,
+      #ffffff 0%,
+      #ffffff 38%,
+      rgba(255, 255, 255, 0.35) 48%,
+      #ffffff 58%,
+      #ffffff 100%
+    );
+    background-size: 220% 100%;
+    background-position: 100% 0;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+  }
+  45% {
+    background-image: linear-gradient(
+      100deg,
+      #ffffff 0%,
+      #f4f7ff 36%,
+      #ffffff 48%,
+      #c8d8ff 52%,
+      #ffffff 64%,
+      #ffffff 100%
+    );
+    background-size: 220% 100%;
+    background-position: 40% 0;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+  }
+  100% {
+    background-image: none;
+    background-size: 100% 100%;
+    background-position: 0 0;
+    -webkit-text-fill-color: #ffffff;
+    color: #ffffff;
+  }
 }

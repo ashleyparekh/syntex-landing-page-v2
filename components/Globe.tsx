@@ -10,10 +10,10 @@ import { COUNTRY_INFO, CORRIDORS, type CountryInfo } from "@/lib/countries";
 import { createArcPoints, latLngToVector3 } from "@/lib/geo";
 
 const GLOBE_RADIUS = 1.5;
-/** Full sphere in frame: ~3.15× radius, FOV 48° */
 const CAMERA_DISTANCE = GLOBE_RADIUS * 3.15;
 const CAMERA_FOV = 48;
 const ROTATE_SPEED = 0.00045;
+const STAR_COUNT = 1000;
 
 type TooltipState = {
   info: CountryInfo;
@@ -27,28 +27,30 @@ type CountryMeshUserData = {
   kind: "fill" | "hit";
 };
 
+type Props = {
+  docked?: boolean;
+};
+
+function easeOut(t: number) {
+  const c = Math.max(0, Math.min(1, t));
+  return 1 - Math.pow(1 - c, 3);
+}
+
 function triangulateRing(ring: Position[]): THREE.BufferGeometry | null {
   if (ring.length < 3) return null;
-
-  // Flatten lng/lat for earcut (2D), then map triangles onto the sphere
   const flat: number[] = [];
   const sphereVerts: THREE.Vector3[] = [];
-
-  // Drop duplicate closing coordinate if present
   const pts =
     ring.length > 1 &&
     ring[0][0] === ring[ring.length - 1][0] &&
     ring[0][1] === ring[ring.length - 1][1]
       ? ring.slice(0, -1)
       : ring;
-
   if (pts.length < 3) return null;
-
   pts.forEach(([lng, lat]) => {
     flat.push(lng, lat);
     sphereVerts.push(latLngToVector3(lat, lng, GLOBE_RADIUS + 0.006));
   });
-
   let indices: number[];
   try {
     indices = earcut(flat, undefined, 2);
@@ -56,14 +58,12 @@ function triangulateRing(ring: Position[]): THREE.BufferGeometry | null {
     return null;
   }
   if (!indices.length) return null;
-
   const positions = new Float32Array(sphereVerts.length * 3);
   sphereVerts.forEach((v, i) => {
     positions[i * 3] = v.x;
     positions[i * 3 + 1] = v.y;
     positions[i * 3 + 2] = v.z;
   });
-
   const geo = new THREE.BufferGeometry();
   geo.setAttribute("position", new THREE.BufferAttribute(positions, 3));
   geo.setIndex(indices);
@@ -71,11 +71,14 @@ function triangulateRing(ring: Position[]): THREE.BufferGeometry | null {
   return geo;
 }
 
-export default function Globe() {
+export default function Globe({ docked = false }: Props) {
   const containerRef = useRef<HTMLDivElement>(null);
+  const dockedRef = useRef(docked);
   const tooltipRef = useRef<TooltipState>(null);
   const [tooltip, setTooltip] = useState<TooltipState>(null);
   const [ready, setReady] = useState(false);
+
+  dockedRef.current = docked;
 
   useEffect(() => {
     const container = containerRef.current;
@@ -95,12 +98,11 @@ export default function Globe() {
     };
 
     let { w: width, h: height } = getSize();
-
     const camera = new THREE.PerspectiveCamera(
       CAMERA_FOV,
       width / height,
       0.1,
-      100
+      200
     );
     camera.position.set(0, 0, CAMERA_DISTANCE);
 
@@ -110,18 +112,18 @@ export default function Globe() {
       powerPreference: "high-performance",
     });
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-    renderer.setSize(width, height, true);
+    renderer.setSize(width, height, false);
     renderer.setClearColor(0x000000, 0);
     renderer.domElement.style.display = "block";
     renderer.domElement.style.width = "100%";
     renderer.domElement.style.height = "100%";
     container.appendChild(renderer.domElement);
 
-    scene.add(new THREE.AmbientLight(0xb8c4d8, 0.7));
-    const key = new THREE.DirectionalLight(0xd0d8e8, 0.85);
-    key.position.set(4, 2.5, 3);
+    scene.add(new THREE.AmbientLight(0x8a9aac, 0.45));
+    const key = new THREE.DirectionalLight(0xd0d8e0, 0.7);
+    key.position.set(4, 2.2, 3);
     scene.add(key);
-    const fill = new THREE.DirectionalLight(0x4a6080, 0.35);
+    const fill = new THREE.DirectionalLight(0x3a5070, 0.25);
     fill.position.set(-3, -1, -2);
     scene.add(fill);
 
@@ -130,27 +132,51 @@ export default function Globe() {
     globeGroup.rotation.x = 0.12;
     scene.add(globeGroup);
 
-    // Ocean sphere — dark blue volume with clear limb shading
+    // Ocean — #0a1628 with soft right-third highlight (#1a3a6e)
+    const oceanUniforms = {
+      uDayColor: { value: new THREE.Color(0x1a3a6e) },
+      uNightColor: { value: new THREE.Color(0x0a1628) },
+    };
     const ocean = new THREE.Mesh(
       new THREE.SphereGeometry(GLOBE_RADIUS, 96, 96),
-      new THREE.MeshPhongMaterial({
-        color: 0x0a1628,
-        emissive: 0x071220,
-        specular: 0x3a5570,
-        shininess: 28,
+      new THREE.ShaderMaterial({
+        uniforms: oceanUniforms,
+        vertexShader: `
+          varying vec3 vNormal;
+          void main() {
+            vNormal = normalize(normalMatrix * normal);
+            gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+          }
+        `,
+        fragmentShader: `
+          uniform vec3 uDayColor;
+          uniform vec3 uNightColor;
+          varying vec3 vNormal;
+          void main() {
+            vec3 n = normalize(vNormal);
+            // Wide soft sunlight from the right — covers ~right third of the disk
+            vec3 lightDir = normalize(vec3(1.0, 0.05, 0.35));
+            float wrap = dot(n, lightDir) * 0.5 + 0.5;
+            float highlight = smoothstep(0.28, 0.88, wrap);
+            highlight = pow(highlight, 0.95);
+            vec3 col = mix(uNightColor, uDayColor, highlight);
+            gl_FragColor = vec4(col, 1.0);
+          }
+        `,
       })
     );
     globeGroup.add(ocean);
 
-    // Soft atmosphere rim (kept inside camera framing)
+    // Subtle soft blue diffusion just beyond the sphere edge (~10–15px feel)
     const atmosphere = new THREE.Mesh(
-      new THREE.SphereGeometry(GLOBE_RADIUS * 1.045, 64, 64),
+      new THREE.SphereGeometry(GLOBE_RADIUS * 1.035, 64, 64),
       new THREE.ShaderMaterial({
         transparent: true,
         depthWrite: false,
         side: THREE.BackSide,
         uniforms: {
-          glowColor: { value: new THREE.Color(0x8aa8c0) },
+          glowColor: { value: new THREE.Color(0x4a7ab0) },
+          uOpacity: { value: 0.09 },
         },
         vertexShader: `
           varying vec3 vNormal;
@@ -162,57 +188,50 @@ export default function Globe() {
         fragmentShader: `
           varying vec3 vNormal;
           uniform vec3 glowColor;
+          uniform float uOpacity;
           void main() {
-            float intensity = pow(0.55 - dot(vNormal, vec3(0.0, 0.0, 1.0)), 2.6);
-            gl_FragColor = vec4(glowColor, intensity * 0.45);
+            float intensity = pow(0.62 - dot(vNormal, vec3(0.0, 0.0, 1.0)), 3.2);
+            intensity = clamp(intensity, 0.0, 1.0);
+            gl_FragColor = vec4(glowColor, intensity * uOpacity);
           }
         `,
       })
     );
     scene.add(atmosphere);
 
-    // Sparse ambient particles
-    const particleCount = 140;
-    const particlePositions = new Float32Array(particleCount * 3);
-    for (let i = 0; i < particleCount; i++) {
-      const r = GLOBE_RADIUS * (1.4 + Math.random() * 1.0);
+    // Star field — steady, slow drift
+    const starPositions = new Float32Array(STAR_COUNT * 3);
+    for (let i = 0; i < STAR_COUNT; i++) {
+      const r = 6 + Math.random() * 14;
       const theta = Math.random() * Math.PI * 2;
       const phi = Math.acos(2 * Math.random() - 1);
-      particlePositions[i * 3] = r * Math.sin(phi) * Math.cos(theta);
-      particlePositions[i * 3 + 1] = r * Math.cos(phi);
-      particlePositions[i * 3 + 2] = r * Math.sin(phi) * Math.sin(theta);
+      starPositions[i * 3] = r * Math.sin(phi) * Math.cos(theta);
+      starPositions[i * 3 + 1] = r * Math.cos(phi);
+      starPositions[i * 3 + 2] = r * Math.sin(phi) * Math.sin(theta);
     }
-    const particleGeo = new THREE.BufferGeometry();
-    particleGeo.setAttribute(
-      "position",
-      new THREE.BufferAttribute(particlePositions, 3)
-    );
-    const particles = new THREE.Points(
-      particleGeo,
-      new THREE.PointsMaterial({
-        color: 0x8899aa,
-        size: 0.014,
-        transparent: true,
-        opacity: 0.45,
-        depthWrite: false,
-        sizeAttenuation: true,
-      })
-    );
-    scene.add(particles);
+    const starGeo = new THREE.BufferGeometry();
+    starGeo.setAttribute("position", new THREE.BufferAttribute(starPositions, 3));
+    const starMat = new THREE.PointsMaterial({
+      color: 0xffffff,
+      size: 0.028,
+      transparent: true,
+      opacity: 0.55,
+      depthWrite: false,
+      sizeAttenuation: true,
+    });
+    const stars = new THREE.Points(starGeo, starMat);
+    scene.add(stars);
 
-    // ——— Arcs: thin bright white signal lines ———
     type ArcTraveler = {
       mesh: THREE.Mesh;
       trail: THREE.Mesh[];
       points: THREE.Vector3[];
       speed: number;
       offset: number;
+      toCountryId: string;
+      lastProgress: number;
     };
-    type SonarPing = {
-      ring: THREE.Mesh;
-      base: THREE.Mesh;
-      phase: number;
-    };
+    type SonarPing = { ring: THREE.Mesh; base: THREE.Mesh; phase: number };
 
     const travelers: ArcTraveler[] = [];
     const sonarPings: SonarPing[] = [];
@@ -224,39 +243,26 @@ export default function Globe() {
         corridor.to[0],
         corridor.to[1],
         GLOBE_RADIUS,
-        0.3 + idx * 0.045,
+        0.28 + idx * 0.035,
         100
       );
       const curve = new THREE.CatmullRomCurve3(points);
 
-      // Thin bright core
+      // Thin signal arc — ~1–1.5px, soft white
       globeGroup.add(
         new THREE.Mesh(
-          new THREE.TubeGeometry(curve, 100, 0.004, 6, false),
+          new THREE.TubeGeometry(curve, 100, 0.0016, 5, false),
           new THREE.MeshBasicMaterial({
             color: 0xffffff,
             transparent: true,
-            opacity: 1,
+            opacity: 0.7,
+            depthWrite: false,
           })
         )
       );
 
-      // Soft glow halo (thin — reads as light, not a fat stroke)
-      globeGroup.add(
-        new THREE.Mesh(
-          new THREE.TubeGeometry(curve, 100, 0.011, 6, false),
-          new THREE.MeshBasicMaterial({
-            color: 0xffffff,
-            transparent: true,
-            opacity: 0.22,
-          })
-        )
-      );
-
-      // Endpoint hubs + sonar rings
       [corridor.from, corridor.to].forEach(([lat, lng], endIdx) => {
         const pos = latLngToVector3(lat, lng, GLOBE_RADIUS + 0.014);
-
         const base = new THREE.Mesh(
           new THREE.SphereGeometry(0.018, 14, 14),
           new THREE.MeshBasicMaterial({ color: 0xffffff })
@@ -264,30 +270,23 @@ export default function Globe() {
         base.position.copy(pos);
         globeGroup.add(base);
 
-        // Ring in local tangent plane — use a thin torus aligned to surface normal
-        const ringGeo = new THREE.RingGeometry(0.03, 0.038, 32);
-        const ringMat = new THREE.MeshBasicMaterial({
-          color: 0xffffff,
-          transparent: true,
-          opacity: 0.7,
-          side: THREE.DoubleSide,
-          depthWrite: false,
-        });
-        const ring = new THREE.Mesh(ringGeo, ringMat);
+        const ring = new THREE.Mesh(
+          new THREE.RingGeometry(0.03, 0.038, 32),
+          new THREE.MeshBasicMaterial({
+            color: 0xffffff,
+            transparent: true,
+            opacity: 0.7,
+            side: THREE.DoubleSide,
+            depthWrite: false,
+          })
+        );
         ring.position.copy(pos);
-        // Orient ring to face outward from globe center
         ring.lookAt(new THREE.Vector3(0, 0, 0));
         ring.rotateY(Math.PI);
         globeGroup.add(ring);
-
-        sonarPings.push({
-          ring,
-          base,
-          phase: idx * 0.7 + endIdx * 0.35,
-        });
+        sonarPings.push({ ring, base, phase: idx * 0.55 + endIdx * 0.3 });
       });
 
-      // Signal packets: sharp head + short trail
       for (let t = 0; t < 2; t++) {
         const head = new THREE.Mesh(
           new THREE.SphereGeometry(0.022, 12, 12),
@@ -298,7 +297,6 @@ export default function Globe() {
           })
         );
         globeGroup.add(head);
-
         const trail: THREE.Mesh[] = [];
         for (let s = 0; s < 5; s++) {
           const seg = new THREE.Mesh(
@@ -313,28 +311,27 @@ export default function Globe() {
           globeGroup.add(seg);
           trail.push(seg);
         }
-
         travelers.push({
           mesh: head,
           trail,
           points,
-          speed: 0.2 + idx * 0.02,
-          offset: t * 0.5 + idx * 0.15,
+          speed: 0.18 + idx * 0.015,
+          offset: t * 0.5 + idx * 0.12,
+          toCountryId: corridor.toCountryId,
+          lastProgress: 0,
         });
       }
     });
 
-    // ——— Countries ———
     type CountryPoly = {
       id: string;
       info: CountryInfo;
-      /** GeoJSON polygons: each is [outerRing, ...holes], coords as [lng, lat] */
       polygons: Position[][][];
     };
-
     const interactiveMeshes: THREE.Mesh[] = [];
     const fillByCountry = new Map<string, THREE.Mesh[]>();
     const countryPolys: CountryPoly[] = [];
+    const flashUntil = new Map<string, number>();
     const raycaster = new THREE.Raycaster();
 
     const idleFillMat = new THREE.MeshBasicMaterial({
@@ -351,18 +348,24 @@ export default function Globe() {
       side: THREE.DoubleSide,
       depthWrite: false,
     });
+    const flashFillMat = new THREE.MeshBasicMaterial({
+      color: 0xffffff,
+      transparent: true,
+      opacity: 0.72,
+      side: THREE.DoubleSide,
+      depthWrite: false,
+    });
     const borderMat = new THREE.LineBasicMaterial({
       color: 0xc8c8c8,
       transparent: true,
-      opacity: 0.85,
+      opacity: 0.72,
     });
     const interactiveBorderMat = new THREE.LineBasicMaterial({
-      color: 0xffffff,
+      color: 0xd8d8d8,
       transparent: true,
-      opacity: 1,
+      opacity: 0.88,
     });
 
-    /** Project a GeoJSON ring onto the sphere as a THREE.Line (curve along surface). */
     function ringToSphereLine(
       ring: Position[],
       radius: number,
@@ -375,7 +378,6 @@ export default function Globe() {
           ? ring.slice(0, -1)
           : ring;
       if (ptsIn.length < 2) return null;
-
       const pts: THREE.Vector3[] = [];
       for (let i = 0; i < ptsIn.length; i++) {
         const [lng, lat] = ptsIn[i];
@@ -385,20 +387,19 @@ export default function Globe() {
         const angle = start.angleTo(end);
         const steps = Math.max(1, Math.ceil(angle * 18));
         for (let s = 0; s < steps; s++) {
-          const t = s / steps;
+          const tt = s / steps;
           const p = start.clone();
           if (angle > 0.0001) {
             const axis = new THREE.Vector3().crossVectors(start, end);
             if (axis.lengthSq() > 1e-8) {
-              p.applyAxisAngle(axis.normalize(), angle * t);
+              p.applyAxisAngle(axis.normalize(), angle * tt);
             } else {
-              p.lerp(end, t).normalize();
+              p.lerp(end, tt).normalize();
             }
           }
           pts.push(p.multiplyScalar(radius));
         }
       }
-      // Close the loop
       if (pts.length > 0) pts.push(pts[0].clone());
       if (pts.length < 2) return null;
       return new THREE.Line(
@@ -407,7 +408,6 @@ export default function Globe() {
       );
     }
 
-    /** Ray-casting point-in-ring (lng/lat plane). Handles antimeridian poorly but fine for our set. */
     function pointInRing(lng: number, lat: number, ring: Position[]): boolean {
       let inside = false;
       for (let i = 0, j = ring.length - 1; i < ring.length; j = i++) {
@@ -452,14 +452,12 @@ export default function Globe() {
           countries: GeometryCollection;
         }>;
         if (disposed) return;
-
         const countries = feature(
           topology,
           topology.objects.countries
         ) as FeatureCollection<Geometry, { name?: string }>;
 
         countries.features.forEach((feat) => {
-          // world-atlas zero-pads some IDs ("076"); normalize to numeric string
           const id = String(Number(feat.id));
           const info = COUNTRY_INFO[id];
           const geometries =
@@ -471,15 +469,13 @@ export default function Globe() {
 
           if (info) {
             const existing = countryPolys.find((c) => c.id === id);
-            if (existing) {
-              existing.polygons.push(...(geometries as Position[][][]));
-            } else {
+            if (existing) existing.polygons.push(...(geometries as Position[][][]));
+            else
               countryPolys.push({
                 id,
                 info,
                 polygons: geometries as Position[][][],
               });
-            }
           }
 
           geometries.forEach((polygon) => {
@@ -491,7 +487,6 @@ export default function Globe() {
               );
               if (border) globeGroup.add(border);
 
-              // Fill every outer ring of interactive countries (all MultiPolygon parts)
               if (info && ringIdx === 0) {
                 const geo = triangulateRing(ring);
                 if (geo) {
@@ -511,21 +506,29 @@ export default function Globe() {
             });
           });
         });
-
         if (!disposed) setReady(true);
       } catch {
         if (!disposed) setReady(true);
       }
     }
-
     loadCountries();
 
-    function setCountryHover(countryId: string | null) {
+    function applyCountryVisuals(now: number) {
       fillByCountry.forEach((meshes, id) => {
-        const active = id === countryId;
+        const flashEnd = flashUntil.get(id) ?? 0;
+        const flashing = now < flashEnd;
+        const flashT = flashing ? 1 - (flashEnd - now) / 750 : 1;
+        const flashStrength = flashing ? Math.max(0, 1 - easeOut(flashT)) : 0;
+        const hovered = id === hoveredCountryId;
+
         meshes.forEach((m) => {
           const mat = m.material as THREE.MeshBasicMaterial;
-          if (active) {
+          if (flashStrength > 0.02) {
+            mat.color.copy(flashFillMat.color);
+            mat.opacity =
+              idleFillMat.opacity +
+              (flashFillMat.opacity - idleFillMat.opacity) * flashStrength;
+          } else if (hovered) {
             mat.color.copy(hoverFillMat.color);
             mat.opacity = hoverFillMat.opacity;
           } else {
@@ -538,16 +541,18 @@ export default function Globe() {
 
     function vector3ToLatLng(v: THREE.Vector3): { lat: number; lng: number } {
       const n = v.clone().normalize();
-      const lat = 90 - (Math.acos(Math.min(1, Math.max(-1, n.y))) * 180) / Math.PI;
-      let lng = ((Math.atan2(n.z, -n.x) * 180) / Math.PI) - 180;
-      // Normalize to [-180, 180]
+      const lat =
+        90 - (Math.acos(Math.min(1, Math.max(-1, n.y))) * 180) / Math.PI;
+      let lng = (Math.atan2(n.z, -n.x) * 180) / Math.PI - 180;
       if (lng > 180) lng -= 360;
       if (lng < -180) lng += 360;
       return { lat, lng };
     }
 
-    function findCountryAt(lat: number, lng: number): { id: string; info: CountryInfo } | null {
-      // Shape-accurate: point-in-polygon against stored GeoJSON rings
+    function findCountryAt(
+      lat: number,
+      lng: number
+    ): { id: string; info: CountryInfo } | null {
       for (const country of countryPolys) {
         if (pointInCountry(lng, lat, country.polygons)) {
           return { id: country.id, info: country.info };
@@ -557,22 +562,23 @@ export default function Globe() {
     }
 
     function onPointerMove(event: PointerEvent) {
-      if (!container) return;
+      if (!container || dockedRef.current) return;
       const rect = container.getBoundingClientRect();
+      if (rect.width < 2 || rect.height < 2) return;
+
       const pointer = new THREE.Vector2(
         ((event.clientX - rect.left) / rect.width) * 2 - 1,
         -((event.clientY - rect.top) / rect.height) * 2 + 1
       );
-
       raycaster.setFromCamera(pointer, camera);
 
       let countryId: string | null = null;
       let info: CountryInfo | null = null;
 
-      // Hit the globe surface → lat/lng → point-in-polygon (matches country shape)
+      // Primary: project onto ocean sphere, then point-in-polygon in lat/lng
+      globeGroup.updateMatrixWorld(true);
       const oceanHits = raycaster.intersectObject(ocean, false);
       if (oceanHits.length > 0) {
-        globeGroup.updateMatrixWorld(true);
         const inv = new THREE.Matrix4().copy(globeGroup.matrixWorld).invert();
         const local = oceanHits[0].point.clone().applyMatrix4(inv);
         const { lat, lng } = vector3ToLatLng(local);
@@ -583,8 +589,8 @@ export default function Globe() {
         }
       }
 
-      // Secondary: triangulated fill meshes (helps when PIP fails on complex rings)
-      if (!countryId) {
+      // Fallback: direct mesh hits (triangulated fills)
+      if (!countryId && interactiveMeshes.length > 0) {
         const meshHits = raycaster.intersectObjects(interactiveMeshes, false);
         if (meshHits.length > 0) {
           const data = meshHits[0].object.userData as CountryMeshUserData;
@@ -595,10 +601,7 @@ export default function Globe() {
 
       if (countryId && info) {
         autoRotate = false;
-        if (hoveredCountryId !== countryId) {
-          hoveredCountryId = countryId;
-          setCountryHover(countryId);
-        }
+        hoveredCountryId = countryId;
         const next: TooltipState = {
           info,
           x: event.clientX - rect.left,
@@ -607,10 +610,7 @@ export default function Globe() {
         tooltipRef.current = next;
         setTooltip(next);
       } else {
-        if (hoveredCountryId) {
-          hoveredCountryId = null;
-          setCountryHover(null);
-        }
+        hoveredCountryId = null;
         if (tooltipRef.current) {
           tooltipRef.current = null;
           setTooltip(null);
@@ -622,7 +622,6 @@ export default function Globe() {
     function onPointerLeave() {
       autoRotate = true;
       hoveredCountryId = null;
-      setCountryHover(null);
       tooltipRef.current = null;
       setTooltip(null);
     }
@@ -634,7 +633,6 @@ export default function Globe() {
       camera.aspect = w / h;
       camera.updateProjectionMatrix();
       renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-      // Keep drawing buffer aspect locked to the square container display size
       renderer.setSize(w, h, false);
       renderer.domElement.style.width = "100%";
       renderer.domElement.style.height = "100%";
@@ -642,7 +640,6 @@ export default function Globe() {
 
     const resizeObserver = new ResizeObserver(() => onResize());
     resizeObserver.observe(container);
-
     container.addEventListener("pointermove", onPointerMove);
     container.addEventListener("pointerleave", onPointerLeave);
     renderer.domElement.addEventListener("pointermove", onPointerMove);
@@ -655,27 +652,27 @@ export default function Globe() {
     function animate() {
       frameId = requestAnimationFrame(animate);
       const t = clock.getElapsedTime();
+      const now = performance.now();
 
-      if (autoRotate) {
+      if (autoRotate && !dockedRef.current) {
         globeGroup.rotation.y += ROTATE_SPEED;
+      } else if (dockedRef.current) {
+        globeGroup.rotation.y += ROTATE_SPEED * 0.65;
       }
 
-      atmosphere.rotation.y = globeGroup.rotation.y;
-      particles.rotation.y = t * 0.015;
+      stars.rotation.y += 0.00035;
+      stars.rotation.x += 0.00012;
 
-      // Sonar ping rings at endpoints
       sonarPings.forEach((ping) => {
         const cycle = ((t * 0.55 + ping.phase) % 1.6) / 1.6;
-        const scale = 1 + cycle * 2.8;
-        ping.ring.scale.setScalar(scale);
-        const mat = ping.ring.material as THREE.MeshBasicMaterial;
-        mat.opacity = Math.max(0, 0.75 * (1 - cycle));
-        // Soft pulse on the hub itself
-        const hubPulse = 1 + Math.sin(t * 2.2 + ping.phase) * 0.12;
-        ping.base.scale.setScalar(hubPulse);
+        ping.ring.scale.setScalar(1 + cycle * 2.8);
+        (ping.ring.material as THREE.MeshBasicMaterial).opacity = Math.max(
+          0,
+          0.75 * (1 - cycle)
+        );
+        ping.base.scale.setScalar(1 + Math.sin(t * 2.2 + ping.phase) * 0.12);
       });
 
-      // Signal travelers
       travelers.forEach((traveler) => {
         const progress = (t * traveler.speed + traveler.offset) % 1;
         const sample = (p: number) => {
@@ -697,11 +694,19 @@ export default function Globe() {
 
         traveler.trail.forEach((seg, s) => {
           seg.position.copy(sample(progress - (s + 1) * 0.012));
-          (seg.material as THREE.MeshBasicMaterial).opacity =
-            Math.max(0, brightness * (0.45 - s * 0.08));
+          (seg.material as THREE.MeshBasicMaterial).opacity = Math.max(
+            0,
+            brightness * (0.45 - s * 0.08)
+          );
         });
+
+        if (traveler.lastProgress > 0.92 && progress < 0.08) {
+          flashUntil.set(traveler.toCountryId, now + 750);
+        }
+        traveler.lastProgress = progress;
       });
 
+      applyCountryVisuals(now);
       renderer.render(scene, camera);
     }
     animate();
@@ -735,18 +740,18 @@ export default function Globe() {
   }, []);
 
   return (
-    <div className="relative aspect-square w-full">
+    <div className="relative h-full w-full">
       <div
         ref={containerRef}
         className="absolute inset-0 cursor-crosshair"
         aria-label="Interactive globe showing Syntex payment corridors"
       />
-      {!ready && (
+      {!ready && !docked && (
         <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
           <span className="font-display text-sm text-fog">Loading globe…</span>
         </div>
       )}
-      {tooltip && (
+      {tooltip && !docked && (
         <div
           className="pointer-events-none absolute z-20 w-60 border border-white/25 bg-black/95 px-4 py-3.5 backdrop-blur-sm"
           style={{

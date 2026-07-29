@@ -17,6 +17,8 @@ const config: Config = {
       fontFamily: {
         sans: ["'Inter'", "system-ui", "sans-serif"],
         display: ["'Space Grotesk'", "system-ui", "sans-serif"],
+        editorial: ["'Cormorant Garamond'", "Georgia", "serif"],
+        times: ["'Times New Roman'", "Times", "serif"],
       },
       keyframes: {
         "fade-up": {

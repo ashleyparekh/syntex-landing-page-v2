@@ -36,6 +36,7 @@ export const COUNTRY_INFO: Record<string, CountryInfo> = {
     name: "Brazil",
     idType: "CPF",
     regulator: "Banco Central do Brasil",
+    corridor: true,
     centroid: [-10.8, -52.9],
   },
   "170": {
@@ -64,6 +65,7 @@ export const COUNTRY_INFO: Record<string, CountryInfo> = {
     name: "Nigeria",
     idType: "NIN",
     regulator: "CBN",
+    corridor: true,
     centroid: [9.1, 8.7],
   },
   "404": {
@@ -146,20 +148,37 @@ export const CORRIDORS: {
   from: [number, number];
   to: [number, number];
   label: string;
+  /** ISO numeric destination country id for flash */
+  toCountryId: string;
 }[] = [
   {
     from: [39.8, -98.5],
     to: [20.6, 78.9],
     label: "US → India",
+    toCountryId: "356",
   },
   {
     from: [39.8, -98.5],
     to: [23.6, -102.5],
     label: "US → Mexico",
+    toCountryId: "484",
   },
   {
     from: [39.8, -98.5],
     to: [12.9, 121.8],
     label: "US → Philippines",
+    toCountryId: "608",
+  },
+  {
+    from: [39.8, -98.5],
+    to: [6.5, 3.4],
+    label: "US → Nigeria",
+    toCountryId: "566",
+  },
+  {
+    from: [39.8, -98.5],
+    to: [-23.55, -46.63],
+    label: "US → Brazil",
+    toCountryId: "76",
   },
 ];
