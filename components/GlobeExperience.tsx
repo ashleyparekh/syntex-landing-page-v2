@@ -82,7 +82,8 @@ export default function GlobeExperienceProvider({
     const paraT = clamp01(scrolled / 0.5);
     setParallaxY(easeStandard(paraT) * -72);
 
-    const dockRaw = clamp01((scrolled - 0.85) / 0.35);
+    // Dock into nav as the hero leaves the viewport
+    const dockRaw = clamp01((scrolled - 0.55) / 0.4);
     setDockProgress(easeStandard(dockRaw));
   }, [isHome]);
 

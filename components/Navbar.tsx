@@ -1,9 +1,23 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
+import dynamic from "next/dynamic";
 import { RequestAccessNavLink } from "@/components/RequestAccessButton";
-import { useGlobeExperienceOptional } from "@/components/GlobeExperience";
+
+const NavGlobe = dynamic(() => import("@/components/NavGlobe"), {
+  ssr: false,
+  loading: () => (
+    // eslint-disable-next-line @next/next/no-img-element
+    <img
+      src="/favicon-32x32.png"
+      alt=""
+      width={32}
+      height={32}
+      className="h-8 w-8 shrink-0"
+    />
+  ),
+});
 
 const links = [
   { href: "/the-gap", label: "The Gap" },
@@ -16,26 +30,38 @@ const links = [
 
 export default function Navbar() {
   const [open, setOpen] = useState(false);
-  const globe = useGlobeExperienceOptional();
+
+  // Lock body scroll while the mobile menu is open
+  useEffect(() => {
+    if (!open) return;
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = prev;
+    };
+  }, [open]);
 
   return (
-    <header className="fixed inset-x-0 top-0 z-50 border-b border-transparent bg-ink/80 backdrop-blur-md">
-      <nav className="section-pad mx-auto flex h-14 max-w-6xl items-center justify-between gap-4">
-        <div className="flex items-center gap-2.5">
-          <div
-            ref={globe?.navSlotRef}
-            className="relative h-[30px] w-[30px] shrink-0"
-            aria-hidden
-          />
+    <header
+      className={`fixed inset-x-0 top-0 z-[80] border-b ${
+        open
+          ? "border-border bg-ink"
+          : "border-transparent bg-ink/80 backdrop-blur-md"
+      }`}
+    >
+      <nav className="section-pad relative z-[81] flex h-14 w-full items-center justify-between gap-4">
+        <div className="relative z-[82] flex items-center gap-2.5">
+          <NavGlobe />
           <Link
             href="/"
             className="shrink-0 font-display text-sm tracking-wide text-paper"
+            onClick={() => setOpen(false)}
           >
             SYNTEX
           </Link>
         </div>
 
-        <div className="hidden items-center gap-5 md:flex">
+        <div className="relative z-[82] hidden items-center gap-5 md:flex">
           {links.map((link) => (
             <Link
               key={link.href}
@@ -50,8 +76,9 @@ export default function Navbar() {
 
         <button
           type="button"
-          className="text-sm text-mist md:hidden"
+          className="relative z-[82] text-sm text-mist md:hidden"
           aria-label="Toggle menu"
+          aria-expanded={open}
           onClick={() => setOpen((v) => !v)}
         >
           {open ? "Close" : "Menu"}
@@ -59,24 +86,32 @@ export default function Navbar() {
       </nav>
 
       {open && (
-        <div className="border-t border-border bg-ink px-6 py-4 md:hidden">
-          <div className="flex flex-col gap-4">
-            {links.map((link) => (
-              <Link
-                key={link.href}
-                href={link.href}
-                className="text-sm text-mist"
+        <>
+          {/* Full-screen opaque scrim so globe never shows through */}
+          <div
+            className="fixed inset-0 top-14 z-[79] bg-ink md:hidden"
+            aria-hidden
+            onClick={() => setOpen(false)}
+          />
+          <div className="relative z-[81] border-t border-border bg-ink px-6 py-5 md:hidden">
+            <div className="flex flex-col gap-4">
+              {links.map((link) => (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  className="text-sm text-mist"
+                  onClick={() => setOpen(false)}
+                >
+                  {link.label}
+                </Link>
+              ))}
+              <RequestAccessNavLink
+                className="text-sm text-paper"
                 onClick={() => setOpen(false)}
-              >
-                {link.label}
-              </Link>
-            ))}
-            <RequestAccessNavLink
-              className="text-sm text-paper"
-              onClick={() => setOpen(false)}
-            />
+              />
+            </div>
           </div>
-        </div>
+        </>
       )}
     </header>
   );

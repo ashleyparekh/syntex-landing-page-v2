@@ -9,20 +9,10 @@ export default function Hero() {
   return (
     <section
       ref={heroSectionRef}
-      className="relative min-h-[100svh] overflow-hidden bg-ink"
+      className="relative flex min-h-[100svh] flex-col overflow-x-clip bg-ink md:block"
     >
-      {/* Globe — dominant visual plane */}
-      <div className="pointer-events-none absolute inset-0 z-0 flex items-center justify-center md:justify-end md:pr-6 lg:pr-14 xl:pr-20">
-        <div
-          ref={heroSlotRef}
-          className="pointer-events-auto relative aspect-square w-[min(92vw,78svh,720px)]"
-          aria-label="Interactive 3D globe showing example payment corridors"
-        />
-      </div>
-
-      {/* Text zones — pointer-events-none so globe hover works underneath */}
-      <div className="section-pad pointer-events-none relative z-[70] mx-auto flex min-h-[100svh] max-w-6xl flex-col justify-between pt-28 pb-12 md:pt-32 md:pb-16">
-        {/* Zone 1 — top left: stacked typographic sandwich */}
+      {/* Zone 1 — title: stacked above globe on mobile, top-left overlay on desktop */}
+      <div className="section-pad relative z-10 order-1 shrink-0 pt-24 md:pointer-events-none md:absolute md:inset-x-0 md:top-0 md:z-[70] md:pt-32">
         <h1
           className="hero-tagline"
           style={{
@@ -34,8 +24,19 @@ export default function Hero() {
           <span className="hero-tagline__serif">without</span>
           <span className="hero-tagline__sans">borders.</span>
         </h1>
+      </div>
 
-        {/* Zone 2 — bottom left caption */}
+      {/* Globe — between title and caption on mobile; right-side plane on desktop */}
+      <div className="pointer-events-none relative z-0 order-2 flex min-h-0 flex-1 items-center justify-center px-4 py-2 md:absolute md:inset-0 md:justify-end md:px-0 md:py-0 md:pr-2 lg:pr-6 xl:pr-10">
+        <div
+          ref={heroSlotRef}
+          className="pointer-events-auto relative aspect-square w-[min(88vw,46svh)] md:w-[min(96vw,88svh,864px)]"
+          aria-label="Interactive 3D globe showing example payment corridors"
+        />
+      </div>
+
+      {/* Zone 2 — caption + CTA: below globe on mobile, bottom-left overlay on desktop */}
+      <div className="section-pad relative z-10 order-3 shrink-0 pb-10 md:pointer-events-none md:absolute md:inset-x-0 md:bottom-0 md:z-[70] md:pb-16">
         <div
           className="max-w-md will-change-transform"
           style={{

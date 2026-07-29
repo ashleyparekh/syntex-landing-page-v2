@@ -10,11 +10,11 @@ const Globe = dynamic(() => import("@/components/Globe"), {
 });
 
 /**
- * Single fixed globe that morphs from the hero slot into the nav slot.
+ * Home-page hero globe only. The nav always has its own mini globe (NavGlobe).
+ * On scroll past the hero, this instance fades out.
  */
 export default function GlobeHost() {
-  const { dockProgress, parallaxY, heroSlotRef, navSlotRef, isHome } =
-    useGlobeExperience();
+  const { dockProgress, parallaxY, heroSlotRef, isHome } = useGlobeExperience();
 
   const shellRef = useRef<HTMLDivElement>(null);
   const dockRef = useRef(dockProgress);
@@ -33,41 +33,34 @@ export default function GlobeHost() {
     let raf = 0;
     let hasBooted = false;
     const place = () => {
-      const nav = navSlotRef.current;
-      if (!nav) {
+      const home = isHomeRef.current;
+      if (!home) {
+        shell.style.opacity = "0";
+        shell.style.pointerEvents = "none";
+        shell.style.transform = "translate3d(-9999px,-9999px,0)";
         raf = requestAnimationFrame(place);
         return;
       }
 
-      const home = isHomeRef.current;
-      const t = home ? dockRef.current : 1;
       const hero = heroSlotRef.current;
-      const navRect = nav.getBoundingClientRect();
       const heroRect = hero?.getBoundingClientRect();
-
-      let fromLeft = navRect.left;
-      let fromTop = navRect.top;
-      let fromSize = Math.max(navRect.width, 30);
-
-      if (home && heroRect && heroRect.width > 40) {
-        fromLeft = heroRect.left;
-        fromTop = heroRect.top + parallaxRef.current * 0.6;
-        fromSize = heroRect.width;
+      if (!heroRect || heroRect.width < 40) {
+        raf = requestAnimationFrame(place);
+        return;
       }
 
-      const toLeft = navRect.left;
-      const toTop = navRect.top;
-      const toSize = Math.max(navRect.width || 30, 28);
-
-      const left = fromLeft + (toLeft - fromLeft) * t;
-      const top = fromTop + (toTop - fromTop) * t;
-      const size = fromSize + (toSize - fromSize) * t;
+      const t = dockRef.current;
+      const left = heroRect.left;
+      const top = heroRect.top + parallaxRef.current * 0.6;
+      const size = heroRect.width;
 
       shell.style.width = `${size}px`;
       shell.style.height = `${size}px`;
       shell.style.transform = `translate3d(${left}px, ${top}px, 0)`;
-      shell.style.opacity = size < 10 ? "0" : "1";
-      shell.style.pointerEvents = !home || t > 0.55 ? "none" : "auto";
+      // Fade out as the page scrolls past the hero
+      shell.style.opacity = String(Math.max(0, 1 - t * 1.15));
+      shell.style.zIndex = "40";
+      shell.style.pointerEvents = t > 0.35 ? "none" : "auto";
 
       if (!hasBooted) {
         hasBooted = true;
@@ -78,21 +71,25 @@ export default function GlobeHost() {
 
     raf = requestAnimationFrame(place);
     return () => cancelAnimationFrame(raf);
-  }, [heroSlotRef, navSlotRef]);
+  }, [heroSlotRef]);
+
+  if (!isHome) return null;
 
   return (
     <div
       ref={shellRef}
-      className="fixed left-0 top-0 z-[60] will-change-transform"
+      className="pointer-events-none fixed left-0 top-0 will-change-transform"
       style={{
         width: 1,
         height: 1,
         transform: "translate3d(-9999px,-9999px,0)",
+        zIndex: 40,
+        opacity: 0,
       }}
       aria-hidden
     >
       <div className="h-full w-full">
-        {booted && <Globe docked={dockProgress > 0.7 || !isHome} />}
+        {booted && <Globe docked={dockProgress > 0.65} />}
       </div>
     </div>
   );
