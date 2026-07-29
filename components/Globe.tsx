@@ -12,8 +12,10 @@ import { createArcPoints, latLngToVector3 } from "@/lib/geo";
 const GLOBE_RADIUS = 1.5;
 const CAMERA_DISTANCE = GLOBE_RADIUS * 3.15;
 const CAMERA_FOV = 48;
-const ROTATE_SPEED = 0.00045;
+const ROTATE_SPEED = 0.0012285;
 const STAR_COUNT = 1000;
+const DRAG_DAMPING = 0.95;
+const DRAG_SENSITIVITY = 0.005;
 
 type TooltipState = {
   info: CountryInfo;
@@ -86,8 +88,10 @@ export default function Globe({ docked = false }: Props) {
 
     let disposed = false;
     let frameId = 0;
-    let autoRotate = true;
     let hoveredCountryId: string | null = null;
+    let isDragging = false;
+    let lastPointerX = 0;
+    let velocityY = ROTATE_SPEED; // yaw — blends toward ROTATE_SPEED after drag
 
     const scene = new THREE.Scene();
     const getSize = () => {
@@ -117,7 +121,15 @@ export default function Globe({ docked = false }: Props) {
     renderer.domElement.style.display = "block";
     renderer.domElement.style.width = "100%";
     renderer.domElement.style.height = "100%";
+    renderer.domElement.style.touchAction = "none";
     container.appendChild(renderer.domElement);
+    container.style.cursor = "grab";
+    renderer.domElement.style.cursor = "grab";
+
+    const setCursor = (cursor: string) => {
+      container.style.cursor = cursor;
+      renderer.domElement.style.cursor = cursor;
+    };
 
     scene.add(new THREE.AmbientLight(0x8a9aac, 0.45));
     const key = new THREE.DirectionalLight(0xd0d8e0, 0.7);
@@ -129,7 +141,7 @@ export default function Globe({ docked = false }: Props) {
 
     const globeGroup = new THREE.Group();
     globeGroup.rotation.y = -0.85;
-    globeGroup.rotation.x = 0.12;
+    globeGroup.rotation.x = 0.28;
     scene.add(globeGroup);
 
     // Ocean — #0a1628 with soft right-third highlight (#1a3a6e)
@@ -561,21 +573,43 @@ export default function Globe({ docked = false }: Props) {
       return null;
     }
 
-    function onPointerMove(event: PointerEvent) {
-      if (!container || dockedRef.current) return;
+    function clearHover() {
+      hoveredCountryId = null;
+      if (tooltipRef.current) {
+        tooltipRef.current = null;
+        setTooltip(null);
+      }
+      if (!isDragging) setCursor("grab");
+    }
+
+    function clientXY(event: MouseEvent | TouchEvent): { x: number; y: number } {
+      if ("touches" in event && event.touches.length > 0) {
+        return { x: event.touches[0].clientX, y: event.touches[0].clientY };
+      }
+      if ("changedTouches" in event && event.changedTouches.length > 0) {
+        return {
+          x: event.changedTouches[0].clientX,
+          y: event.changedTouches[0].clientY,
+        };
+      }
+      const me = event as MouseEvent;
+      return { x: me.clientX, y: me.clientY };
+    }
+
+    function updateHover(clientX: number, clientY: number) {
+      if (!container || dockedRef.current || isDragging) return;
       const rect = container.getBoundingClientRect();
       if (rect.width < 2 || rect.height < 2) return;
 
       const pointer = new THREE.Vector2(
-        ((event.clientX - rect.left) / rect.width) * 2 - 1,
-        -((event.clientY - rect.top) / rect.height) * 2 + 1
+        ((clientX - rect.left) / rect.width) * 2 - 1,
+        -((clientY - rect.top) / rect.height) * 2 + 1
       );
       raycaster.setFromCamera(pointer, camera);
 
       let countryId: string | null = null;
       let info: CountryInfo | null = null;
 
-      // Primary: project onto ocean sphere, then point-in-polygon in lat/lng
       globeGroup.updateMatrixWorld(true);
       const oceanHits = raycaster.intersectObject(ocean, false);
       if (oceanHits.length > 0) {
@@ -589,7 +623,6 @@ export default function Globe({ docked = false }: Props) {
         }
       }
 
-      // Fallback: direct mesh hits (triangulated fills)
       if (!countryId && interactiveMeshes.length > 0) {
         const meshHits = raycaster.intersectObjects(interactiveMeshes, false);
         if (meshHits.length > 0) {
@@ -600,30 +633,82 @@ export default function Globe({ docked = false }: Props) {
       }
 
       if (countryId && info) {
-        autoRotate = false;
         hoveredCountryId = countryId;
+        setCursor("pointer");
         const next: TooltipState = {
           info,
-          x: event.clientX - rect.left,
-          y: event.clientY - rect.top,
+          x: clientX - rect.left,
+          y: clientY - rect.top,
         };
         tooltipRef.current = next;
         setTooltip(next);
       } else {
-        hoveredCountryId = null;
-        if (tooltipRef.current) {
-          tooltipRef.current = null;
-          setTooltip(null);
-        }
-        autoRotate = true;
+        clearHover();
       }
     }
 
-    function onPointerLeave() {
-      autoRotate = true;
-      hoveredCountryId = null;
-      tooltipRef.current = null;
-      setTooltip(null);
+    function onDragStart(event: MouseEvent | TouchEvent) {
+      if (dockedRef.current) return;
+      isDragging = true;
+      velocityY = 0;
+      const { x } = clientXY(event);
+      lastPointerX = x;
+      clearHover();
+      setCursor("grabbing");
+      if ("preventDefault" in event) event.preventDefault();
+    }
+
+    function onDragMove(event: MouseEvent | TouchEvent) {
+      if (!isDragging || dockedRef.current) return;
+      const { x } = clientXY(event);
+      const dx = x - lastPointerX;
+      lastPointerX = x;
+
+      // Horizontal drag only — X axis stays locked
+      const dYaw = dx * DRAG_SENSITIVITY;
+      globeGroup.rotation.y += dYaw;
+      velocityY = dYaw;
+      if ("preventDefault" in event) event.preventDefault();
+    }
+
+    function onDragEnd() {
+      if (!isDragging) return;
+      isDragging = false;
+      // If release had near-zero motion, resume at default auto-rotate speed
+      if (Math.abs(velocityY) < 1e-6) velocityY = ROTATE_SPEED;
+      setCursor(hoveredCountryId ? "pointer" : "grab");
+    }
+
+    function onMouseDown(event: MouseEvent) {
+      if (event.button !== 0) return;
+      onDragStart(event);
+    }
+
+    function onMouseMove(event: MouseEvent) {
+      if (isDragging) onDragMove(event);
+      else updateHover(event.clientX, event.clientY);
+    }
+
+    function onMouseUp() {
+      onDragEnd();
+    }
+
+    function onMouseLeave() {
+      if (!isDragging) clearHover();
+    }
+
+    function onTouchStart(event: TouchEvent) {
+      if (event.touches.length !== 1) return;
+      onDragStart(event);
+    }
+
+    function onTouchMove(event: TouchEvent) {
+      if (!isDragging) return;
+      onDragMove(event);
+    }
+
+    function onTouchEnd() {
+      onDragEnd();
     }
 
     function onResize() {
@@ -640,10 +725,15 @@ export default function Globe({ docked = false }: Props) {
 
     const resizeObserver = new ResizeObserver(() => onResize());
     resizeObserver.observe(container);
-    container.addEventListener("pointermove", onPointerMove);
-    container.addEventListener("pointerleave", onPointerLeave);
-    renderer.domElement.addEventListener("pointermove", onPointerMove);
-    renderer.domElement.addEventListener("pointerleave", onPointerLeave);
+    const el = renderer.domElement;
+    el.addEventListener("mousedown", onMouseDown);
+    window.addEventListener("mousemove", onMouseMove);
+    window.addEventListener("mouseup", onMouseUp);
+    el.addEventListener("mouseleave", onMouseLeave);
+    el.addEventListener("touchstart", onTouchStart, { passive: false });
+    el.addEventListener("touchmove", onTouchMove, { passive: false });
+    el.addEventListener("touchend", onTouchEnd);
+    el.addEventListener("touchcancel", onTouchEnd);
     window.addEventListener("resize", onResize);
     requestAnimationFrame(() => onResize());
 
@@ -654,10 +744,14 @@ export default function Globe({ docked = false }: Props) {
       const t = clock.getElapsedTime();
       const now = performance.now();
 
-      if (autoRotate && !dockedRef.current) {
-        globeGroup.rotation.y += ROTATE_SPEED;
-      } else if (dockedRef.current) {
-        globeGroup.rotation.y += ROTATE_SPEED * 0.65;
+      // Y-axis only: auto-rotate, or inertia easing back to auto-rotate after drag
+      if (!isDragging) {
+        const targetSpeed = dockedRef.current
+          ? ROTATE_SPEED * 0.65
+          : ROTATE_SPEED;
+        globeGroup.rotation.y += velocityY;
+        velocityY =
+          velocityY * DRAG_DAMPING + targetSpeed * (1 - DRAG_DAMPING);
       }
 
       stars.rotation.y += 0.00035;
@@ -715,10 +809,14 @@ export default function Globe({ docked = false }: Props) {
       disposed = true;
       cancelAnimationFrame(frameId);
       resizeObserver.disconnect();
-      container.removeEventListener("pointermove", onPointerMove);
-      container.removeEventListener("pointerleave", onPointerLeave);
-      renderer.domElement.removeEventListener("pointermove", onPointerMove);
-      renderer.domElement.removeEventListener("pointerleave", onPointerLeave);
+      el.removeEventListener("mousedown", onMouseDown);
+      window.removeEventListener("mousemove", onMouseMove);
+      window.removeEventListener("mouseup", onMouseUp);
+      el.removeEventListener("mouseleave", onMouseLeave);
+      el.removeEventListener("touchstart", onTouchStart);
+      el.removeEventListener("touchmove", onTouchMove);
+      el.removeEventListener("touchend", onTouchEnd);
+      el.removeEventListener("touchcancel", onTouchEnd);
       window.removeEventListener("resize", onResize);
       renderer.dispose();
       if (renderer.domElement.parentNode === container) {
@@ -743,7 +841,7 @@ export default function Globe({ docked = false }: Props) {
     <div className="relative h-full w-full">
       <div
         ref={containerRef}
-        className="absolute inset-0 cursor-crosshair"
+        className="absolute inset-0"
         aria-label="Interactive globe showing Syntex payment corridors"
       />
       {!ready && !docked && (
