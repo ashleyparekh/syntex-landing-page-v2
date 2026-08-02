@@ -1,16 +1,22 @@
-import type { Metadata } from "next";
 import Features from "@/components/Features";
 import Impact from "@/components/Impact";
 import CTA from "@/components/CTA";
+import { JsonLd, breadcrumbJsonLd } from "@/components/JsonLd";
+import { pageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: "Features — Syntex",
-  description: "Discover how Syntex automates document collection, follow-ups, pre-qualification, and onboarding tracking for banks.",
-};
+export const metadata = pageMetadata({
+  title: "Features",
+  description:
+    "Discover how Syntex automates document collection, follow-ups, pre-qualification, and onboarding tracking for banks.",
+  path: "/features",
+});
 
 export default function FeaturesPage() {
   return (
     <main className="pt-20">
+      <JsonLd
+        data={breadcrumbJsonLd([{ name: "Features", path: "/features" }])}
+      />
       <div className="relative pt-16 pb-4">
         <div className="absolute inset-0 bg-white" />
         <div className="relative max-w-7xl mx-auto px-6 text-center">

@@ -1,33 +1,23 @@
-import type { Metadata } from "next";
 import Breadcrumbs from "@/components/Breadcrumbs";
 import LinkedInButton from "@/components/LinkedInButton";
 import RequestAccessButton from "@/components/RequestAccessButton";
-import { SITE_URL, CONTACT_EMAIL } from "@/lib/site";
+import { CONTACT_EMAIL } from "@/lib/site";
+import { pageMetadata } from "@/lib/seo";
 
 const title = "Contact";
 const description =
-  "Want to learn more or work with Syntex? Email ashley@syntex.pro, find us on LinkedIn, or book a demo.";
+  "Get in touch with Syntex or book a demo to see AI-native KYB orchestration in action.";
 
-export const metadata: Metadata = {
+export const metadata = pageMetadata({
   title,
   description,
-  alternates: {
-    canonical: `${SITE_URL}/contact`,
-    languages: { "en-US": `${SITE_URL}/contact` },
-  },
-  openGraph: {
-    title: `${title} — Syntex`,
-    description,
-    url: `${SITE_URL}/contact`,
-    type: "website",
-    locale: "en_US",
-  },
-};
+  path: "/contact",
+});
 
 export default function ContactPage() {
   return (
     <main className="pb-24">
-      <Breadcrumbs items={[{ name: "Contact" }]} />
+      <Breadcrumbs items={[{ name: "Contact", path: "/contact" }]} />
       <div className="section-pad mx-auto max-w-xl">
         <h1 className="font-display text-3xl text-paper md:text-5xl">
           Contact

@@ -1,34 +1,23 @@
-import type { Metadata } from "next";
 import Breadcrumbs from "@/components/Breadcrumbs";
 import Problem from "@/components/Problem";
 import FAQ, { problemFaqs } from "@/components/FAQ";
 import CTA from "@/components/CTA";
-import { SITE_URL } from "@/lib/site";
+import { pageMetadata } from "@/lib/seo";
 
 const title = "The Gap";
 const description =
-  "Cross-border stablecoin payment companies clear the same client through multiple infrastructure partners, each with a different KYB vendor. Formats do not match. Teams rebuild translation code for every pair.";
+  "KYB breaks at the border. Every infrastructure partner runs its own verification vendor. Syntex is the layer that connects them.";
 
-export const metadata: Metadata = {
+export const metadata = pageMetadata({
   title,
   description,
-  alternates: {
-    canonical: `${SITE_URL}/the-gap`,
-    languages: { "en-US": `${SITE_URL}/the-gap` },
-  },
-  openGraph: {
-    title: `${title} — Syntex`,
-    description,
-    url: `${SITE_URL}/the-gap`,
-    type: "website",
-    locale: "en_US",
-  },
-};
+  path: "/the-gap",
+});
 
 export default function TheGapPage() {
   return (
     <main>
-      <Breadcrumbs items={[{ name: "The Gap" }]} />
+      <Breadcrumbs items={[{ name: "The Gap", path: "/the-gap" }]} />
       <div className="section-pad mx-auto max-w-5xl pb-6">
         <h1 className="font-display text-3xl text-paper md:text-5xl">
           The Gap

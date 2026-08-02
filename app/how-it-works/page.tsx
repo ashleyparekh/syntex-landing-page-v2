@@ -1,33 +1,22 @@
-import type { Metadata } from "next";
 import Breadcrumbs from "@/components/Breadcrumbs";
 import HowItWorks from "@/components/HowItWorks";
 import CTA from "@/components/CTA";
-import { SITE_URL } from "@/lib/site";
+import { pageMetadata } from "@/lib/seo";
 
 const title = "How it works";
 const description =
-  "Receive documents you already have, translate them across KYB vendor formats, and route packages to every infrastructure partner from one input.";
+  "See how Syntex translates KYB documents across vendor formats and routes them to all your infrastructure partners automatically.";
 
-export const metadata: Metadata = {
+export const metadata = pageMetadata({
   title,
   description,
-  alternates: {
-    canonical: `${SITE_URL}/how-it-works`,
-    languages: { "en-US": `${SITE_URL}/how-it-works` },
-  },
-  openGraph: {
-    title: `${title} — Syntex`,
-    description,
-    url: `${SITE_URL}/how-it-works`,
-    type: "website",
-    locale: "en_US",
-  },
-};
+  path: "/how-it-works",
+});
 
 export default function HowItWorksPage() {
   return (
     <main>
-      <Breadcrumbs items={[{ name: "How it works" }]} />
+      <Breadcrumbs items={[{ name: "How it works", path: "/how-it-works" }]} />
       <div className="section-pad mx-auto max-w-5xl pb-4">
         <h1 className="font-display text-3xl text-paper md:text-5xl">
           How it works

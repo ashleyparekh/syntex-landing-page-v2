@@ -1,33 +1,22 @@
-import type { Metadata } from "next";
 import Breadcrumbs from "@/components/Breadcrumbs";
 import WhoItsFor from "@/components/WhoItsFor";
 import CTA from "@/components/CTA";
-import { SITE_URL } from "@/lib/site";
+import { pageMetadata } from "@/lib/seo";
 
 const title = "Who it is for";
 const description =
-  "Syntex is for any US-based cross-border stablecoin payment company: ecommerce, payroll, remittance, trade finance, and gig payouts. Not limited to one corridor.";
+  "Syntex is built for US-based cross-border stablecoin payment companies across B2B ecommerce, payroll, remittance, trade finance, and gig economy platforms.";
 
-export const metadata: Metadata = {
+export const metadata = pageMetadata({
   title,
   description,
-  alternates: {
-    canonical: `${SITE_URL}/who-its-for`,
-    languages: { "en-US": `${SITE_URL}/who-its-for` },
-  },
-  openGraph: {
-    title: `${title} — Syntex`,
-    description,
-    url: `${SITE_URL}/who-its-for`,
-    type: "website",
-    locale: "en_US",
-  },
-};
+  path: "/who-its-for",
+});
 
 export default function WhoItsForPage() {
   return (
     <main>
-      <Breadcrumbs items={[{ name: "Who it is for" }]} />
+      <Breadcrumbs items={[{ name: "Who it is for", path: "/who-its-for" }]} />
       <div className="section-pad mx-auto max-w-5xl pb-4">
         <h1 className="font-display text-3xl text-paper md:text-5xl">
           Who Syntex is for

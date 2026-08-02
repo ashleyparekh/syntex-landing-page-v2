@@ -1,33 +1,22 @@
-import type { Metadata } from "next";
 import Link from "next/link";
 import Breadcrumbs from "@/components/Breadcrumbs";
 import { posts } from "@/lib/blog";
-import { SITE_URL } from "@/lib/site";
+import { pageMetadata } from "@/lib/seo";
 
 const title = "Blog";
 const description =
-  "Essays on KYB orchestration, stablecoin compliance, foreign national IDs, and cross-border payment corridors.";
+  "The Syntex blog — insights on stablecoin compliance, KYB for cross-border payments, the GENIUS Act, and what it takes to move money across borders.";
 
-export const metadata: Metadata = {
+export const metadata = pageMetadata({
   title,
   description,
-  alternates: {
-    canonical: `${SITE_URL}/blog`,
-    languages: { "en-US": `${SITE_URL}/blog` },
-  },
-  openGraph: {
-    title: `${title} — Syntex`,
-    description,
-    url: `${SITE_URL}/blog`,
-    type: "website",
-    locale: "en_US",
-  },
-};
+  path: "/blog",
+});
 
 export default function BlogIndexPage() {
   return (
     <main className="pb-24">
-      <Breadcrumbs items={[{ name: "Blog" }]} />
+      <Breadcrumbs items={[{ name: "Blog", path: "/blog" }]} />
       <div className="section-pad mx-auto max-w-3xl">
         <h1 className="font-display text-3xl text-paper md:text-5xl">
           Blog

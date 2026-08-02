@@ -1,11 +1,19 @@
-import type { Metadata } from "next";
 import Link from "next/link";
+import { JsonLd, breadcrumbJsonLd } from "@/components/JsonLd";
+import { blogPostingJsonLd, pageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: "Finovate 2026: What We Learned Demoing to 2,000 Bankers — Syntex",
-  description:
-    "Seven minutes. No slides. Just product. Here's what we learned from demoing Syntex on stage at Finovate and talking to hundreds of bankers over two days.",
-};
+const title = "Finovate 2026: What We Learned Demoing to 2,000 Bankers";
+const description =
+  "Seven minutes. No slides. Just product. Here's what we learned from demoing Syntex on stage at Finovate and talking to hundreds of bankers over two days.";
+const slug = "finovate-2026-what-we-learned";
+const datePublished = "2026-01-01";
+
+export const metadata = pageMetadata({
+  title,
+  description,
+  path: `/blog/${slug}`,
+  type: "article",
+});
 
 const sections = [
   {
@@ -80,6 +88,19 @@ A lot of the feedback we got was about clarity. Not just what we built, but how 
 export default function BlogPost() {
   return (
     <main className="pt-20">
+      <JsonLd
+        data={blogPostingJsonLd({
+          headline: title,
+          datePublished,
+          slug,
+        })}
+      />
+      <JsonLd
+        data={breadcrumbJsonLd([
+          { name: "Blog", path: "/blog" },
+          { name: title, path: `/blog/${slug}` },
+        ])}
+      />
       {/* Back link */}
       <div className="max-w-2xl mx-auto px-6 pt-10 pb-2">
         <Link

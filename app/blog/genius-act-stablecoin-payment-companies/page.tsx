@@ -1,28 +1,16 @@
-import type { Metadata } from "next";
 import BlogArticle, { InlineLink } from "@/components/BlogArticle";
-import { SITE_URL } from "@/lib/site";
+import { pageMetadata } from "@/lib/seo";
 
 const title = "What the GENIUS Act means for stablecoin payment companies";
 const description =
   "What the GENIUS Act is, who it affects, and what it means for KYB obligations at US stablecoin payment companies.";
 
-export const metadata: Metadata = {
+export const metadata = pageMetadata({
   title,
   description,
-  alternates: {
-    canonical: `${SITE_URL}/blog/genius-act-stablecoin-payment-companies`,
-    languages: {
-      "en-US": `${SITE_URL}/blog/genius-act-stablecoin-payment-companies`,
-    },
-  },
-  openGraph: {
-    title: `${title} — Syntex`,
-    description,
-    url: `${SITE_URL}/blog/genius-act-stablecoin-payment-companies`,
-    type: "article",
-    locale: "en_US",
-  },
-};
+  path: "/blog/genius-act-stablecoin-payment-companies",
+  type: "article",
+});
 
 export default function Page() {
   return (

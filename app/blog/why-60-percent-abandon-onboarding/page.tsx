@@ -1,11 +1,20 @@
-import type { Metadata } from "next";
 import Link from "next/link";
+import { JsonLd, breadcrumbJsonLd } from "@/components/JsonLd";
+import { blogPostingJsonLd, pageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: "Why 60% of Commercial Banking Applicants Never Finish Onboarding — Syntex",
-  description:
-    "Most banks don't have a demand problem. They have a conversion problem. Over 60% of applicants abandon financial onboarding flows. Here's why — and what it costs.",
-};
+const title =
+  "Why 60% of Commercial Banking Applicants Never Finish Onboarding";
+const description =
+  "Most banks don't have a demand problem. They have a conversion problem. Over 60% of applicants abandon financial onboarding flows. Here's why — and what it costs.";
+const slug = "why-60-percent-abandon-onboarding";
+const datePublished = "2025-03-01";
+
+export const metadata = pageMetadata({
+  title,
+  description,
+  path: `/blog/${slug}`,
+  type: "article",
+});
 
 const sections = [
   {
@@ -87,6 +96,19 @@ The institutions that win will be the ones that can onboard customers quickly, t
 export default function BlogPost() {
   return (
     <main className="pt-20">
+      <JsonLd
+        data={blogPostingJsonLd({
+          headline: title,
+          datePublished,
+          slug,
+        })}
+      />
+      <JsonLd
+        data={breadcrumbJsonLd([
+          { name: "Blog", path: "/blog" },
+          { name: title, path: `/blog/${slug}` },
+        ])}
+      />
       {/* Back link */}
       <div className="max-w-2xl mx-auto px-6 pt-10 pb-2">
         <Link

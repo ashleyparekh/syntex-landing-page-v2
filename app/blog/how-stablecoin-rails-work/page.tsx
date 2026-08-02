@@ -1,27 +1,17 @@
-import type { Metadata } from "next";
 import BlogArticle, { InlineLink } from "@/components/BlogArticle";
-import { SITE_URL } from "@/lib/site";
+import { pageMetadata } from "@/lib/seo";
 
 const title =
   "How stablecoin rails actually work: on-ramp, off-ramp, and where compliance fits";
 const description =
   "A plain explainer of how a cross-border stablecoin payment moves, written for fintech founders new to stablecoin rails.";
 
-export const metadata: Metadata = {
+export const metadata = pageMetadata({
   title,
   description,
-  alternates: {
-    canonical: `${SITE_URL}/blog/how-stablecoin-rails-work`,
-    languages: { "en-US": `${SITE_URL}/blog/how-stablecoin-rails-work` },
-  },
-  openGraph: {
-    title: `${title} — Syntex`,
-    description,
-    url: `${SITE_URL}/blog/how-stablecoin-rails-work`,
-    type: "article",
-    locale: "en_US",
-  },
-};
+  path: "/blog/how-stablecoin-rails-work",
+  type: "article",
+});
 
 export default function Page() {
   return (

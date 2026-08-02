@@ -5,11 +5,11 @@ import Footer from "@/components/Footer";
 import GlobeExperienceProvider from "@/components/GlobeExperience";
 import GlobeHost from "@/components/GlobeHost";
 import { SITE_URL } from "@/lib/site";
-
-const TITLE =
-  "Syntex — AI-native KYB orchestration for cross-border stablecoin payments";
-const DESCRIPTION =
-  "Syntex translates KYB documents across vendor formats and routes them to all your infrastructure partners automatically. Built for US cross-border stablecoin payment companies operating in India, Mexico, and the Philippines.";
+import {
+  HOME_DESCRIPTION,
+  HOME_TITLE,
+  organizationJsonLd,
+} from "@/lib/seo";
 
 export const viewport: Viewport = {
   width: "device-width",
@@ -19,10 +19,11 @@ export const viewport: Viewport = {
 
 export const metadata: Metadata = {
   title: {
-    default: TITLE,
+    default: HOME_TITLE,
     template: "%s — Syntex",
   },
-  description: DESCRIPTION,
+  description: HOME_DESCRIPTION,
+  authors: [{ name: "Syntex" }],
   keywords: [
     "KYB orchestration",
     "cross-border stablecoin compliance",
@@ -41,8 +42,8 @@ export const metadata: Metadata = {
     },
   },
   openGraph: {
-    title: TITLE,
-    description: DESCRIPTION,
+    title: HOME_TITLE,
+    description: HOME_DESCRIPTION,
     type: "website",
     siteName: "Syntex",
     url: SITE_URL,
@@ -50,8 +51,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: TITLE,
-    description: DESCRIPTION,
+    site: "@usesyntex",
+    title: HOME_TITLE,
+    description: HOME_DESCRIPTION,
   },
   robots: { index: true, follow: true },
   metadataBase: new URL(SITE_URL),
@@ -65,23 +67,13 @@ export const metadata: Metadata = {
   },
 };
 
-const jsonLd = {
-  "@context": "https://schema.org",
-  "@type": "SoftwareApplication",
-  name: "Syntex",
-  description: DESCRIPTION,
-  applicationCategory: "FinancialApplication",
-  operatingSystem: "Web",
-  url: SITE_URL,
-};
-
 export default function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en-US" className="antialiased">
+    <html lang="en" className="antialiased">
       <head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link
@@ -93,13 +85,16 @@ export default function RootLayout({
           href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@1,400;1,500&family=Inter:wght@400;500&family=Space+Grotesk:wght@300;400;500;600&display=swap"
           rel="stylesheet"
         />
-        <link rel="alternate" hrefLang="en-US" href={SITE_URL} />
+        <meta name="robots" content="index, follow" />
+        <meta name="author" content="Syntex" />
         <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
         <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
         <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
         <script
           type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(organizationJsonLd),
+          }}
         />
       </head>
       <body className="bg-ink text-paper">

@@ -1,27 +1,17 @@
-import type { Metadata } from "next";
 import BlogArticle, { InlineLink } from "@/components/BlogArticle";
-import { SITE_URL } from "@/lib/site";
+import { pageMetadata } from "@/lib/seo";
 
 const title =
   "Aadhaar, CURP, PhilSys: why US compliance tools can't read foreign IDs";
 const description =
   "Why US-built KYB vendors fail on non-US document types and what that means for emerging-market payment corridors.";
 
-export const metadata: Metadata = {
+export const metadata = pageMetadata({
   title,
   description,
-  alternates: {
-    canonical: `${SITE_URL}/blog/aadhaar-curp-philsys-foreign-ids`,
-    languages: { "en-US": `${SITE_URL}/blog/aadhaar-curp-philsys-foreign-ids` },
-  },
-  openGraph: {
-    title: `${title} — Syntex`,
-    description,
-    url: `${SITE_URL}/blog/aadhaar-curp-philsys-foreign-ids`,
-    type: "article",
-    locale: "en_US",
-  },
-};
+  path: "/blog/aadhaar-curp-philsys-foreign-ids",
+  type: "article",
+});
 
 export default function Page() {
   return (

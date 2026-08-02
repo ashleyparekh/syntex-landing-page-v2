@@ -1,11 +1,19 @@
-import type { Metadata } from "next";
 import Link from "next/link";
+import { JsonLd, breadcrumbJsonLd } from "@/components/JsonLd";
+import { blogPostingJsonLd, pageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: "How AI Is Reshaping Business Account Opening in 2026 — Syntex",
-  description:
-    "AI isn't replacing compliance. It's removing the bottlenecks around it. Here's how AI is cutting weeks off business account opening timelines in 2026.",
-};
+const title = "How AI Is Reshaping Business Account Opening in 2026";
+const description =
+  "AI isn't replacing compliance. It's removing the bottlenecks around it. Here's how AI is cutting weeks off business account opening timelines in 2026.";
+const slug = "how-ai-is-reshaping-business-account-opening";
+const datePublished = "2026-02-01";
+
+export const metadata = pageMetadata({
+  title,
+  description,
+  path: `/blog/${slug}`,
+  type: "article",
+});
 
 const sections = [
   {
@@ -101,6 +109,19 @@ const keyShifts = [
 export default function BlogPost() {
   return (
     <main className="pt-20">
+      <JsonLd
+        data={blogPostingJsonLd({
+          headline: title,
+          datePublished,
+          slug,
+        })}
+      />
+      <JsonLd
+        data={breadcrumbJsonLd([
+          { name: "Blog", path: "/blog" },
+          { name: title, path: `/blog/${slug}` },
+        ])}
+      />
       {/* Back link */}
       <div className="max-w-2xl mx-auto px-6 pt-10 pb-2">
         <Link

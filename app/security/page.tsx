@@ -1,15 +1,21 @@
-import type { Metadata } from "next";
 import Security from "@/components/Security";
 import CTA from "@/components/CTA";
+import { JsonLd, breadcrumbJsonLd } from "@/components/JsonLd";
+import { pageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: "Security — Syntex",
-  description: "Syntex is built on enterprise-grade security infrastructure: AWS, end-to-end encryption, audit logs, and more.",
-};
+export const metadata = pageMetadata({
+  title: "Security",
+  description:
+    "Syntex is built on enterprise-grade security infrastructure: AWS, end-to-end encryption, audit logs, and more.",
+  path: "/security",
+});
 
 export default function SecurityPage() {
   return (
     <main className="pt-20">
+      <JsonLd
+        data={breadcrumbJsonLd([{ name: "Security", path: "/security" }])}
+      />
       <div className="relative pt-16 pb-4">
         <div className="absolute inset-0 bg-white" />
         <div className="relative max-w-7xl mx-auto px-6 text-center">

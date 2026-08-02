@@ -1,7 +1,9 @@
 import Link from "next/link";
 import Breadcrumbs from "@/components/Breadcrumbs";
+import { JsonLd } from "@/components/JsonLd";
 import type { ReactNode } from "react";
-import { getRelated } from "@/lib/blog";
+import { getRelated, posts } from "@/lib/blog";
+import { blogPostingJsonLd } from "@/lib/seo";
 
 export default function BlogArticle({
   slug,
@@ -17,13 +19,22 @@ export default function BlogArticle({
   children: ReactNode;
 }) {
   const related = getRelated(slug);
+  const post = posts.find((p) => p.slug === slug);
+  const datePublished = post?.date ?? date;
 
   return (
     <article className="pb-24">
+      <JsonLd
+        data={blogPostingJsonLd({
+          headline: title,
+          datePublished,
+          slug,
+        })}
+      />
       <Breadcrumbs
         items={[
           { name: "Blog", path: "/blog" },
-          { name: title },
+          { name: title, path: `/blog/${slug}` },
         ]}
       />
       <div className="section-pad mx-auto max-w-2xl">
